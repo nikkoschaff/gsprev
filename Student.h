@@ -13,9 +13,12 @@
 #define STUDENT_H_
 
 // Local header includes
+//#include "DataInterface.h"
+#include "sqlite3.h"
 
 // System header includes
 #include <string>
+#include <map>
 
 class Student {
 
@@ -27,29 +30,27 @@ public:
 	 * @param	name	Name of the student
 	 *
 	 */
-	Student( std::string newName );
+	Student( std::map< std::string, std::string > data, int id = -1 );
 
 	/**
 	 * Destructor for the student
 	 */
 	~Student();
 
-	/**
-	 * Setter for the student name
-	 *
-	 * @param	name	New student name
-	 *
-	 */
-	void setName( std::string newName );
+	// Declaration of the DataInterface method dbRead
+	void dbRead( int id ) ;
 
-	/**
-	 * Getter for the name
-	 *
-	 *
-	 * @return	string	Student name
-	 */
-	std::string getName();
+	// Declaration of the DataInterface method dbWrite
+	void dbWrite( int id );
 
+	// Declaration of the DataInterface method dbIdInside
+	bool dbIdInside( int id );
+
+	// Declaration of the DataInterface method putFieldValue
+	void putFieldValue( std::string key, std::string value );
+
+	// Declaration of the DataInterface method getFieldValue
+	std::string getFieldValue( std::string key );	
 
 	/**
 	 * Getter for the ID
@@ -64,8 +65,8 @@ private:
 	// Student ID - for internal use only
 	int ID;
 
-	// Student name
-	std::string name;
+	// Map of data fields
+	std::map< std::string, std::string > dataFields;
 
 };
 

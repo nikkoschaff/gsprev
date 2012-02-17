@@ -3,7 +3,6 @@
 
 #include "stdafx.h"
 #include "GradeSnap.h"
-#include "sqlite3.h"
 
 
 #define MAX_LOADSTRING 100

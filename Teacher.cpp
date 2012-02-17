@@ -9,21 +9,22 @@
 #include "stdafx.h"
 #include "Teacher.h"
 
+
 using namespace std;
 
 	
 // Constructor for the Teacher
-Teacher::Teacher( string newName ): name( newName ) {
-	// TODO setter for ID
-	ID = 0;
+Teacher::Teacher( std::map< std::string, std::string > data, int id )
+: dataFields( data ), ID( id )  {
+	dbRead( ID );
 }
 
 
 // Constructor for the Teacher
-Teacher::Teacher( string newName, std::map< int, Class > newClasses ): name( newName ),
- classes( newClasses ) {
-	// TODO setter for ID
-	ID = 0;
+Teacher::Teacher( std::map< std::string, std::string > data, 
+	std::map< int, Class > newClasses, int id )
+: dataFields( data ), classes( newClasses ), ID( id ) {
+	dbRead( ID );
 }
 
 	
@@ -31,7 +32,34 @@ Teacher::Teacher( string newName, std::map< int, Class > newClasses ): name( new
 Teacher::~Teacher() {
 }
 
-	// Puts a class into the classes map
+// Declaration of the DataInterface method dbRead
+void Teacher::dbRead( int id ) {
+	// TODO
+}
+
+// Declaration of the DataInterface method dbWrite
+void Teacher::dbWrite( int id )  {
+	// TODO
+}
+
+
+// Declaration of the DataInterface method dbIdInside
+bool Teacher::dbIdInside( int id ) {
+	// TODO
+	return true;
+}
+
+// Declaration of the DataInterface method putFieldValue
+void Teacher::putFieldValue( string key, string value ) {
+	dataFields.insert( pair<string,string>( key, value ) );
+}
+
+// Declaration of the DataInterface method getFieldValue
+string Teacher::getFieldValue( string key ) {
+	return dataFields.at( key );
+}
+
+// Puts a class into the classes map
 void Teacher::putClass( int classID, Class theClass ) {
 	classes.insert( pair< int, Class >( classID, theClass ) );
 }
@@ -44,14 +72,4 @@ Class Teacher::getClass( int classID ) {
 // Getter for the Teacher ID
 int Teacher::getID() {
 	return ID;
-}
-
-// Getter for the Teacher name
-std::string Teacher::getName() {
-	return name;
-}
-
-	// Setter for the Teacher name
-void Teacher::setName( std::string newName ) {
-	name = newName;
 }

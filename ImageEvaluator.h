@@ -10,6 +10,7 @@
 
 //Local header includes
 #include "highgui.h"
+#include "AssignmentImage.h"
 
 //System header includes
 #include "opencv2\opencv.hpp"
@@ -115,7 +116,38 @@ public:
 	///
 	ImageEvaluator& operator=( const ImageEvaluator &nIE );
 
+	/**
+	 * Newer method - Reads from a filename and returns a completed
+	 *		AssignmentImage
+	 * 
+	 * @param	filename	The image filename
+	 * 
+	 * @return	AssignmentImage	Assignment Image formed from the read
+	 */
+	AssignmentImage readImage( std::string filename );
 
+	/**
+	 * Sets the name to be what was found from the exam image
+	 *
+	 * @postcondition	name has been set 
+	 */
+	void setName();
+
+	/**
+	 * Finds and sets the name letter regions on the exam
+	 *
+	 * @postcondition	Each of the Rects for the nameLetterRegions created
+	 */
+	void setNameLetterRegions();
+
+	/**
+	 * Gets the letter found in the answer bubble region
+	 *
+	 * @param	nameLetterRegion	Region of the answer bubble column
+	 *
+	 * @return	char	The letter character found
+	 */
+	char getNameLetter( cv::Rect nameLetterRegion );
 
 private:
 
@@ -127,6 +159,12 @@ private:
 	int numQuestions;
 	/// AnswerRegion vector
 	std::vector< cv::Rect > regions;
+	// Name letter region vector
+	std::vector< cv::Rect > nameLetterRegions;
+	// Answers vector
+	std::vector< std::string > answersVector;
+	// Name of the test-taker (taken from image bubbles)
+	std::string name;
 
 	/// Calibration corner points
 	/// Upper-Left

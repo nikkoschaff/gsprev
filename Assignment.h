@@ -12,6 +12,8 @@
 
 
 // Local header includes
+//#include "DataInterface.h"
+#include "sqlite3.h"
 
 // System header includes
 #include <string>
@@ -29,14 +31,27 @@ public:
 	 * @param	name	Name of the assignment
 	 *
 	 */
-	// TODO reflect changes for including name, weight, and number of questions in constructor
-	Assignment( std::string theName );
-
+	Assignment( std::map< std::string, std::string > data, int numQ, int id = -1 );
 
 	/**
 	 * Destructor for the assignment
 	 */
 	~Assignment();
+
+	// Declaration of the DataInterface method dbRead
+	void dbRead( int id );
+
+	// Declaration of the DataInterface method dbWrite
+	void dbWrite( int id );
+
+	// Declaration of the DataInterface method dbIdInside
+	bool dbIdInside( int id );
+
+	// Declaration of the DataInterface method putFieldValue
+	void putFieldValue( std::string key, std::string value );
+
+	// Declaration of the DataInterface method getFieldValue
+	std::string getFieldValue( std::string key );
 
 	/**
 	 * Getter for the assignment ID
@@ -45,22 +60,6 @@ public:
 	 *
 	 */
 	int getID();
-
-	/**
-	 * Getter for the assignment name
-	 *
-	 * @return	string	Assignment name
-	 *
-	 */
-	std::string getName();
-
-	/**
-	 * Setter for the assignment name
-	 *
-	 * @param newName	String of the new name
-	 *
-	 */
-	void setName( std::string newName );
 
 	/**
 	 * Setter for the number of questions on the assignment
@@ -79,55 +78,6 @@ public:
 	int getNumQuestions();
 
 	/**
-	 * Getter for the due date on the assignment
-	 *
-	 * @return	string	string representation of the due date
-	 * 
-	 */
-	std::string getDueDate();
-
-	/**
-	 * Setter for the due date on the assignment
-	 *
-	 * @param	string	string of the due date
-	 * 
-	 */
-	void setDueDate( std::string newDueDate );
-
-	/**
-	 * Getter for the date when the assignment was assigned to students
-	 *
-	 * @return	string	String of the assigned date
-	 * 
-	 */
-	std::string getAssignedDate();
-
-	/**
-	 * Setter for the date the assignment will be given to students
-	 *
-	 * @param	newAssignedDate	Assignment date
-	 * 
-	 */
-	void setAssignedDate( std::string newAssignedDate );
-
-	/**
-	 * Places an answer at the given index
-	 * 
-	 * @param	int		The index expected (answerID)
-	 * @param	string	The new answer
-	 * 
-	 */
-	void putAnswer( int answerID, std::string answer );
-
-	/**
-	 * Getter for an answer at a given index
-	 *
-	 * @param	int		Index expected (answerID)
-	 * @return	string	Answer for the question at the index queried
-	 */
-	std::string getAnswer( int answerID );
-
-	/**
 	 * Puts a filename of an assignment image in the map, keyed to the studentID
 	 *
 	 * @param	studentID	student's ID
@@ -142,22 +92,6 @@ public:
 	 * @return	string		Image filename
 	 */
 	std::string getFilename( int studentID );
-
-	/**
-	 * Sets the date that a student handed in this assignment
-	 *
-	 * @param	handInDate	Date that the student handed in this assignment
-	 * 
-	 */
-	void setHandInDate( int studentID, std::string handInDate );
-
-	/**
-	 * Gets the hand in date for this assignemnt for the given student
-	 *
-	 * @param	studentID	Student's ID
-	 * @return	string		Student's date of handing in the assignment
-	 */
-	std::string getHandInDate( int studentID );
 
 	/**
 	 * Puts a student's answer in their answers vector
@@ -202,34 +136,29 @@ public:
 	// TOODO reflect in design document
 	std::vector< std::string > getStudentAnswerArray( int studentID );
 
+	/**
+	 * Gets the full map of student answers
+	 * 
+	 * @return	map<int, vector<string> >	studentAnswerMap
+	 */
+	std::map< int, std::vector< std::string > > getStudentAnswerMap();
+
 private:
 
 	// ID - For internal use only
 	int ID;
 
-	// Name of the assignment
-	std::string name;
-
-	// Weight of the assignment, assumed to be between 0 and 100
-	double weight;
+	// Map of data fields
+	std::map< std::string, std::string > dataFields;
 
 	// Number of questions on the assignment
 	int numQuestions;
-
-	// String detailing the due date
-	std::string dueDate;
-
-	// String of the date assigned to students
-	std::string assignedDate;
 
 	// Map of answer IDs to answers
 	std::vector< std::string > answersList;
 
 	// Map of student IDs to image filenames, not necessary in all implementations
 	std::map< int, std::string > imageFilenameMap;
-
-	// Map of the student IDs to the hand-in date
-	std::map< int, std::string > studentHandInDateMap;
 
 	// Map of the student IDs to the list of their answers
 	std::map< int, std::vector< std::string > > studentAnswerMap;

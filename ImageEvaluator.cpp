@@ -30,7 +30,8 @@ using namespace cv;
 /// ImageEvaluator constructor
 ImageEvaluator::ImageEvaluator( int numQ )
 : numQuestions( numQ ), MAIN_X_OFFSET( 7.169230769 ),
-	MAIN_Y_OFFSET( 35.58974359 ), regions( numQ + 1 ) {
+	MAIN_Y_OFFSET( 35.58974359 ), regions( numQ + 1 ),
+	nameLetterRegions( ), name( "" ), answersVector( numQ + 1 ) {
 
 	// Sets the base image corner points (TEMP)
 	mainUL.x = 113.0f;
@@ -544,4 +545,25 @@ ImageEvaluator& ImageEvaluator::operator=( const ImageEvaluator &nIE ) {
 	baseImage = nIE.baseImage;
 	numQuestions = nIE.numQuestions;
 	return *this;
+}
+
+// Newer read method - reads from a filename and returns completed image data
+AssignmentImage ImageEvaluator::readImage( string filename ) {
+	// TODO
+	return AssignmentImage();
+}
+
+// Sets the name to be what was found in the exam image
+void setName() {
+	// TODO later
+}
+
+// Finds and sets the name letter regions on the exam
+void setNameLetterRegions() {
+	// TODO later
+}
+
+// Gets the letter found in the answer bubble region
+char getNameLetter( Rect nameLetterRegion ) {
+	// TODO later
 }

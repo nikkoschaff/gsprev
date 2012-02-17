@@ -34,7 +34,7 @@ public:
 	 * @param	filenames	Filenames of the images
 	 */	
 	EvalHelper( Assignment theAssignment, std::map< int, Student > theStudentMap,
-		std::vector< std::string > theFilenames );
+		std::vector< std::string > theFilenames, std::vector<int> IDs );
 
 	/**
 	 * Destructor for EvalHelper
@@ -60,12 +60,19 @@ public:
 
 	/**
 	 * 
-	 * Gets the student ID via iteration in Map (may change to DB query later on)
+	 * Gets the student ID via iteration in Map
 	 *
 	 * @param	studentName	The student's name
-	 * @return	int		The student's matching ID
+	 * @return	int		The student's matching ID, -1 if not found
 	 */
 	int getIDFromName( std::string studentName );
+
+	/**
+	 * Getter for the assignment
+	 *
+	 * @return	assignment	The assignment in this helper class
+	 */
+	Assignment getAssignment();
 
 
 private:
@@ -81,7 +88,9 @@ private:
 
 	// Mapping of studentIDs to students
 	std::map< int, Student > studentMap;
-
+	
+	// Mapping of positions in the filenames map to student ID (only if provided)
+	std::vector< int > studentIDsVector;
 };
 
 

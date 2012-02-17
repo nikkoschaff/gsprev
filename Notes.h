@@ -1,34 +1,39 @@
 /*
 
-!!!!!!1: TODO set up Sqlite DB early - any changes arising from that should be made early
-1: TODO Establish Serialization method (at least for IDs)
-2: TODO reflect changes in Teacher.h to match DD
-4: TODO only answers, no questions for now (reflect in DD)
-5: TODO reflect changes in DD (q/a now in vector, not map)
-6: TODO reflect changes in DD (no private EvalHelper in class)
-7: TODO design and implement filesystem storage method.  Could match #9
-8: TODO Make a list/map of student info fields (configurable by user), storing it
-	and the ID for the DB in student, so it's a configurable file that works with data
-9: (consider) dataClass interface, so all reading/writing classes can be sure to
-	have their own implementation of the method.  That way dataClasses can be constructed
-	raw, and have their info read in (if the ID number exists).  That way no manager
-	class has to do it for them.  It also could be possible to implement a Factory pattern,
-	though having the read/write to DB functions be private could override the necessity.
-10: TODO consider zipping and/or compressing image file to save space
+$$$1: TODO reflect changes: 
+	A: Teacher.h to match DD
+	B: only answers, no questions for now (reflect in DD)
+	C: reflect changes in DD (q/a now in vector, not map)
+	D: reflect changes in DD (no private EvalHelper in class)
+$$$2: TODO handle issue - 2d mapping of data from datafield
+	ex: map<field,value>fields.(handInDate)->map<studentID,date>
+	^ This would be stored as a table of.... integers?  It has to be
+		Within the table, yet it would need to be a table within the table
+	SOLUTION -> store primary key of associated map of correct keys
+	ex: map<field,value>fields.(handInDate)->handInPrimaryKey->(table of <studentID,date>
+$$$3: Set standards
+	1: NOTE: "name" in Student (needed for getIDFromName, not needed now)
+***4: TODO handle issue -> how to grade and assign name if names already known 
+	internally, and not using recognition to find name from sheet?
+	TRY Mapping to a pair<studentID,filename>, where studentID wouldnt be necessary
+		all times, making filenames more versatile
 
 I: Stubbing & initial build
 
 	A: Teacher
-		1: Finish Teacher.cpp (ID)
+		1: Finish Teacher.cpp (DB)
 
 	B: Class
-		1: Finish Class.cpp (ID, implementation)
+		1: Finish Class.cpp (DB)
 
 	C: Assignment
-		1: Finish Assignment.cpp (ID, implementation)
+		1: Finish Assignment.cpp (DB)
+
+	D: Student
+		1: Finish Student.cpp (DB)
 
 	E: EvalHelper
-		1: Finish EvalHelper.cpp (implementation)
+		1: Finish EvalHelper.cpp (implementation [filename/StudentID])
 
 	G: ImageEvaluator (Special case - just needs extra implementation & cleanup)
 		1: Finish ImageEvaluator.h

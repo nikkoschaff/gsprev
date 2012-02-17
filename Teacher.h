@@ -17,6 +17,7 @@
 // Local header includes
 #include "Class.h"
 #include "GradeSnap.h"
+#include "sqlite3.h"
 
 // System header includes
 #include <string>
@@ -33,7 +34,7 @@ public:
 	 * @param	name	The name of the teacher
 	 *
 	 */
-	Teacher( std::string newName );
+	Teacher( std::map< std::string, std::string > data, int id = -1 );
 
 	/**
 	 * Constructor for the Teacher
@@ -42,12 +43,28 @@ public:
 	 * @param	classes	The map of classes to be added
 	 *
 	 */
-	Teacher( std::string newName, std::map< int, Class > newClasses );
+	Teacher(  std::map< std::string, std::string > data, 
+		std::map< int, Class > newClasses, int id = -1 );
 
 	/**
 	 * Destructor for the teacher
 	 */
 	~Teacher();
+
+	// Declaration of the DataInterface method dbRead
+	void dbRead( int id );
+
+	// Declaration of the DataInterface method dbWrite
+	void dbWrite( int id ) ;
+
+	// Declaration of the DataInterface method dbIdInside
+	bool dbIdInside( int id );
+
+	// Declaration of the DataInterface method putFieldValue
+	void putFieldValue( std::string key, std::string value );
+
+	// Declaration of the DataInterface method getFieldValue
+	std::string getFieldValue( std::string key );
 
 	/**
 	 * Puts a class into the classes map
@@ -74,34 +91,19 @@ public:
 	// TODO reflect change in DD
 	int getID();
 
-	/**
-	 * Getter for the Teacher name
-	 *
-	 * @return	string	Teacher name
-	 */
-	// TODO reflect change in DD
-	std::string getName();
-
-	/**
-	 * Setter for the Teacher name
-	 *
-	 * @param	string	New Teacher name
-	 */
-	// TODO reflect change in DD
-	void setName( std::string newName );
-
 private:
 
 	// Teacher's ID - for internal system use
 	int ID;
 
-	// Teacher's name
-	std::string name;
+	// Map of data fields
+	std::map< std::string, std::string > dataFields;
 
 	// Map of the teacher's classes
 	// key -> classID
 	// value -> Class
 	std::map< int, Class > classes;
+
 
 };
 
