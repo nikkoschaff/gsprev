@@ -12,11 +12,10 @@ $$$2: TODO handle issue - 2d mapping of data from datafield
 	SOLUTION -> store primary key of associated map of correct keys
 	ex: map<field,value>fields.(handInDate)->handInPrimaryKey->(table of <studentID,date>
 $$$3: Set standards
-	1: NOTE: "name" in Student (needed for getIDFromName, not needed now)
-***4: TODO handle issue -> how to grade and assign name if names already known 
-	internally, and not using recognition to find name from sheet?
-	TRY Mapping to a pair<studentID,filename>, where studentID wouldnt be necessary
-		all times, making filenames more versatile
+	1: "name" in Student (needed for getIDFromName, not needed now)
+	2: 
+****4: TOOO assignment - set Key, score vector for students
+
 
 I: Stubbing & initial build
 
@@ -33,14 +32,7 @@ I: Stubbing & initial build
 		1: Finish Student.cpp (DB)
 
 	E: EvalHelper
-		1: Finish EvalHelper.cpp (implementation [filename/StudentID])
-
-	G: ImageEvaluator (Special case - just needs extra implementation & cleanup)
-		1: Finish ImageEvaluator.h
-		2: Finish ImageEvaluator.cpp
-
-II: Database -> Implement (more to do as needed)
-
+		1: Finish EvalHelper.cpp (filesystem, DB - finding studentID)
 
 III: Image Evaluator -> modify to work with new image, and apply needed changes
 		(more to be added as needed)

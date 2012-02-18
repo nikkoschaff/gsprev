@@ -74,8 +74,7 @@ public:
 	 * @param	studentAnswersMap	Map of student IDs to their answer arrays
 	 *
 	 */
-	void gradeAssignment( int assignmentID, std::vector< std::string > filenames,
-		bool knowNames );
+	void gradeAssignment( int assignmentID, std::vector< std::string > filenames );
 
 	/**
 	 * Getter for the class ID

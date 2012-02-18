@@ -244,6 +244,8 @@ vector< string > ImageEvaluator::readExam() {
 	// Get the answer regions
 	cv_setAnswerRegions();
 
+	// TODO later - get name info
+
 	// Vector of answers for each question at index
 	vector< string > answers( numQuestions + 1 );
 
@@ -547,10 +549,11 @@ ImageEvaluator& ImageEvaluator::operator=( const ImageEvaluator &nIE ) {
 	return *this;
 }
 
-// Newer read method - reads from a filename and returns completed image data
+// Reads from a filename and returns completed assignment image
 AssignmentImage ImageEvaluator::readImage( string filename ) {
-	// TODO
-	return AssignmentImage();
+	setImage( filename );
+	readExam();
+	return AssignmentImage( filename, name, answersVector );
 }
 
 // Sets the name to be what was found in the exam image
@@ -566,4 +569,5 @@ void setNameLetterRegions() {
 // Gets the letter found in the answer bubble region
 char getNameLetter( Rect nameLetterRegion ) {
 	// TODO later
+	return 'a';
 }

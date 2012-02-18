@@ -13,9 +13,9 @@ using namespace std;
 
 // Constructor for EvalHelper
 EvalHelper::EvalHelper( Assignment theAssignment, map< int, Student > theStudentMap,
-	vector< string > theFilenames, vector<int> IDs )
+	vector< string > theFilenames )
 :assignment( theAssignment ), studentMap( theStudentMap ), filenames( theFilenames ),
-	imgEval( theAssignment.getNumQuestions() ), studentIDsVector( IDs ) {
+	imgEval( theAssignment.getNumQuestions() )  {
 }
 
 // Desctructor for EvalHelper
@@ -38,10 +38,19 @@ void EvalHelper::gradeAssignment() {
 // Reads an image through ImageEvaluator, gets the resultant AssignImg,
 //		Then extracts and stores the data accordintly
 void EvalHelper::readAndStoreImage( std::string filename ) {
-	// TODO implement
 
+	AssignmentImage img = imgEval.readImage( filename );
+	// Consider whether name found or provided
+	// Stores as unnamed if so, otherwise stores according to ID
+	int studentID = 0;
+	if( img.getStudentName().compare( "" ) == 0
+		|| ( studentID = getIDFromName( img.getStudentName() ) ) == -1 ) {
+		// TODO (db) make new student ID
+		studentID = 999;
+	}
 
-	// TODO consider whether name found or provided
+	assignment.putFilename( studentID, filename );
+	assignment.setStudentAnswerArray( studentID, img.getAnswersList() );
 
 	// TODO store in filesystem directory
 }

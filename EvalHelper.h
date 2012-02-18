@@ -34,7 +34,7 @@ public:
 	 * @param	filenames	Filenames of the images
 	 */	
 	EvalHelper( Assignment theAssignment, std::map< int, Student > theStudentMap,
-		std::vector< std::string > theFilenames, std::vector<int> IDs );
+		std::vector< std::string > theFilenames );
 
 	/**
 	 * Destructor for EvalHelper
@@ -88,9 +88,9 @@ private:
 
 	// Mapping of studentIDs to students
 	std::map< int, Student > studentMap;
-	
-	// Mapping of positions in the filenames map to student ID (only if provided)
-	std::vector< int > studentIDsVector;
+
+	// Mapping of student IDs to image files
+	std::map< int, std::string > imageFilenames;
 };
 
 

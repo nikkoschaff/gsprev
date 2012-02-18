@@ -67,21 +67,14 @@ void Class::gradeAssignment( int assignmentID, std::map< int, std::vector< std::
 
 // Grades exam from image input - uses filename locations of images; doesn't
 //	pass actual images
-void Class::gradeAssignment( int assignmentID, std::vector< std::string > filenames,
-	bool knowNames ) {
+void Class::gradeAssignment( int assignmentID,
+	std::vector< std::string > filenames ) {
 		
 	// Gets the assignment from the map
 	Assignment gradingAssignment = assignmentMap.at( assignmentID );
 
-	// If names known, give index vector of student IDs to helper by vector
-	vector< int > studentIDs;
-	if( knowNames ) {
-		// TODO give index vector of student IDs to helper
-	}
-
 	// Gets an eval helper to grade the image from a file
-	EvalHelper helper = EvalHelper( gradingAssignment, studentMap, filenames,
-		studentIDs );
+	EvalHelper helper = EvalHelper( gradingAssignment, studentMap, filenames );
 
 	// Grades and gets the assignment from EvalHelper
 	helper.gradeAssignment();

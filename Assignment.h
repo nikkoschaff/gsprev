@@ -110,7 +110,6 @@ public:
 	 * @param	vector<string>	Vector containing all of the student's answers	
 	 * 
 	 */
-	// TODO reflect changes of full vector in the map
 	void setStudentAnswerArray( int studentID, std::vector< std::string >
 		answers );
 
@@ -133,7 +132,6 @@ public:
 	 * @return	vector<string>	Vector containing student's answers
 	 *
 	 */
-	// TOODO reflect in design document
 	std::vector< std::string > getStudentAnswerArray( int studentID );
 
 	/**
@@ -142,6 +140,7 @@ public:
 	 * @return	map<int, vector<string> >	studentAnswerMap
 	 */
 	std::map< int, std::vector< std::string > > getStudentAnswerMap();
+
 
 private:
 
@@ -154,15 +153,11 @@ private:
 	// Number of questions on the assignment
 	int numQuestions;
 
-	// Map of answer IDs to answers
-	std::vector< std::string > answersList;
-
 	// Map of student IDs to image filenames, not necessary in all implementations
 	std::map< int, std::string > imageFilenameMap;
 
 	// Map of the student IDs to the list of their answers
 	std::map< int, std::vector< std::string > > studentAnswerMap;
-
 
 };
 
