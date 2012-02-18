@@ -72,7 +72,6 @@ public:
 	 * @param	classID	Class ID
 	 * @param	class	Class to be added
 	 */
-	// TODO reflect change in DD
 	void putClass( int classID, Class theClass );
 
 	/**
@@ -80,7 +79,6 @@ public:
 	 *
 	 * @param	classID	The ID of the class
 	 */
-	// TODO reflect change in DD
 	Class getClass( int classID );
 
 	/**
@@ -88,7 +86,6 @@ public:
 	 *
 	 * @return	int	Teacher ID
 	 */
-	// TODO reflect change in DD
 	int getID();
 
 private:

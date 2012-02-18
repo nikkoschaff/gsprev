@@ -27,11 +27,9 @@ public:
 	 * 
 	 * @param	filename	The name (with directory) of the image file
 	 * @param	studentName	The name of the student
-	 * @param	studentID	The ID of the student
 	 * @param	answers		List of answers
 	 *
 	 */
-	// TODO reflect changes in DD (no studentID at this level - found in EvalHelper)
 	AssignmentImage( std::string theFilename, std::string theStudentName, 
 		std::vector< std::string > theAnswers );
 
