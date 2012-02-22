@@ -30,8 +30,8 @@ using namespace cv;
 /// ImageEvaluator constructor
 ImageEvaluator::ImageEvaluator( int numQ )
 : numQuestions( numQ ), MAIN_X_OFFSET( 7.169230769 ),
-	MAIN_Y_OFFSET( 35.58974359 ), regions( numQ + 1 ),
-	nameLetterRegions( ), name( "" ), answersVector( numQ + 1 ) {
+	MAIN_Y_OFFSET( 35.58974359 ), regions( numQ ),
+	nameLetterRegions( ), name( "" ), answersVector( numQ ) {
 
 	// Sets the base image corner points (TEMP)
 	mainUL.x = 113.0f;
@@ -55,6 +55,74 @@ ImageEvaluator::ImageEvaluator( int numQ )
 
 /// ImageEvaluator desstructor
 ImageEvaluator::~ImageEvaluator() {
+}
+
+
+// Reads from a filename and returns completed assignment image
+vector< string > ImageEvaluator::readExamImage( string filename ) {
+
+	// Set the image
+	setImage( filename );
+
+	// Compute the calibration corner points
+	cv_compCalibCorners();
+
+	// Orient the image to be solidly readable for extracting information
+	cv_orientImage();
+
+	// -- Image is now calibrated and readable
+
+	// Read the answers from the regions
+	readExamAnswers();
+
+	// Sets the name as a string specified in the header
+	//readExamName();
+
+	// Pushes the name to the last region in the vector
+	answersVector.push_back( name );
+
+	// Return a vector of the answers with the name tacked along at the end
+	return answersVector;
+}
+
+
+/// Reads and interprets the exam, returning the answers
+vector< string > ImageEvaluator::readExamAnswers() {
+
+	// Answer regions within the test
+	vector< Rect > answerRegions( numQuestions );
+
+	// Calculate the answer regions
+	cv_setAnswerRegions();
+
+	// Vector of answers for each question at index
+	answersVector = vector< string >( numQuestions );
+
+	// For each answer region, determine answer and place it into answers vector
+	for( int i = 0; i < numQuestions; i++ ) {
+		answersVector.at( i ) = cv_getAnswer( regions.at( i ) );
+	}
+
+	return answersVector;
+}
+
+
+// Sets the name to be what was found in the exam image
+// TODO (later with new image) finish
+void readExamName() {
+	// TODO later
+
+	//setNameLetterRegions();
+
+}
+
+
+/// Copies the ImageEvaluator class
+ImageEvaluator& ImageEvaluator::operator=( const ImageEvaluator &nIE ) {
+	examImage = nIE.examImage;
+	baseImage = nIE.baseImage;
+	numQuestions = nIE.numQuestions;
+	return *this;
 }
 
 /// Loads the image from the given filename
@@ -83,13 +151,7 @@ void ImageEvaluator::setImage( string eFilename ) {
 void ImageEvaluator::cv_setAnswerRegions() {
 
 	// Answer regions within the test
-	vector< Rect > answerRegions( numQuestions + 1 );
-
-	// Compute the calibration corner points
-	cv_compCalibCorners();
-
-	// Orient the image to be solidly readable for extracting information
-	cv_orientImage();
+	regions = vector< Rect >( numQuestions );
 
 	// Calculate and find each question ROI within range of numQuestions
 
@@ -119,13 +181,13 @@ void ImageEvaluator::cv_setAnswerRegions() {
 
 
 	//Find the ROIs located at each position
-	for ( int numQ = 1; numQ <= numQuestions; numQ++ ) {
+	for ( int numQ = 0; numQ <= numQuestions; numQ++ ) {
 		// Create and store ROI
 		CvRect answerRegion = { int( relativeX ), int( relativeY ), 
 			int( double( QUESTION_ROI_WIDTH ) * resRatioWidth ),
 			int( double( QUESTION_ROI_HEIGHT ) * resRatioHeight ) };
 		// Stores the answer region ROI into the vector
-		answerRegions.at( numQ ) = answerRegion;
+		regions.at( numQ ) = answerRegion;
 
 		//Draws rectangle of bounding box; for testing
 		
@@ -146,16 +208,6 @@ void ImageEvaluator::cv_setAnswerRegions() {
 			relativeY += relyoff;	
 		}
 	}
-
-	
-	// Output -- for testing purposes only
-	//namedWindow( "result", 0 );
-	//imshow( "result", examImage );
-	//waitKey( 0 );
-	//destroyAllWindows();
-	
-	// Set the ROIs to regions
-	regions = answerRegions; 
 }
 
 /// Returns the answer for that particular region
@@ -236,25 +288,6 @@ string ImageEvaluator::cv_getAnswer( Rect answerRegion ) {
 
 
 	return answer;
-}
-
-/// Reads and interprets the exam, returning the answers
-vector< string > ImageEvaluator::readExam() {
-
-	// Get the answer regions
-	cv_setAnswerRegions();
-
-	// TODO later - get name info
-
-	// Vector of answers for each question at index
-	vector< string > answers( numQuestions + 1 );
-
-	// For each answer region, determine answer and place it into answers vector
-	for( int i = 1; i < numQuestions + 1; i++ ) {
-		answers.at( i ) = cv_getAnswer( regions.at( i ) );
-	}
-
-	return answers;
 }
 
 /// Computes the four calibration corner points
@@ -531,43 +564,17 @@ void ImageEvaluator::cv_orientImage() {
 	*/
 }
 
-/// Getter for the exam image
-Mat ImageEvaluator::getExamImage() const {
-	return examImage;
-}
-
-/// Getter for the regions vector
-vector< Rect > ImageEvaluator::getRegions() {
-	return regions;
-}
-
-/// Copies the ImageEvaluator class
-ImageEvaluator& ImageEvaluator::operator=( const ImageEvaluator &nIE ) {
-	examImage = nIE.examImage;
-	baseImage = nIE.baseImage;
-	numQuestions = nIE.numQuestions;
-	return *this;
-}
-
-// Reads from a filename and returns completed assignment image
-AssignmentImage ImageEvaluator::readImage( string filename ) {
-	setImage( filename );
-	readExam();
-	return AssignmentImage( filename, name, answersVector );
-}
-
-// Sets the name to be what was found in the exam image
-void setName() {
-	// TODO later
-}
 
 // Finds and sets the name letter regions on the exam
-void setNameLetterRegions() {
+// TODO later
+void ImageEvaluator::setNameLetterRegions() {
 	// TODO later
+	int x = 1;
 }
 
 // Gets the letter found in the answer bubble region
-char getNameLetter( Rect nameLetterRegion ) {
+// TODO later
+char ImageEvaluator::getNameLetter( Rect nameLetterRegion ) {
 	// TODO later
 	return 'a';
 }

@@ -10,7 +10,6 @@
 
 //Local header includes
 #include "highgui.h"
-#include "AssignmentImage.h"
 
 //System header includes
 #include "opencv2\opencv.hpp"
@@ -36,6 +35,27 @@ public:
 	/// Name: ImageEvaluator desstructor
 	///
 	~ImageEvaluator();
+
+	/**
+	 * Newer method - Reads from a filename and returns a completed
+	 *		AssignmentImage
+	 * 
+	 * @param	filename	The image filename
+	 * 
+	 * @return	vector< string > The vector of answers with the last name at the end
+	 */
+	std::vector< std::string > readExamImage( std::string filename );
+
+	/// 
+	/// Name: operator= Copies the ImageEvaluator class
+	///
+	/// @param: ImageEvaluator  ie  The ImageEvaluator object being copied
+	///
+	ImageEvaluator& operator=( const ImageEvaluator &nIE );
+
+
+
+private:
 
 	///
 	/// Name: setImage  Loads the image from the given filename
@@ -79,7 +99,7 @@ public:
 	///
 	/// Returns: vector< string >  Vector of answers on the test
 	///
-	std::vector< std::string > readExam();
+	std::vector< std::string > readExamAnswers();
 
 	///
 	/// Name: compCalibCorners	Computes the main calibration corner points
@@ -96,43 +116,17 @@ public:
 	///
 	void cv_orientImage();
 
-	///
-	/// Name: getExamImage  Getter for the pointer to the exam image
-	///
-	/// @return: Mat	Matrix of the exam image
-	///
-	cv::Mat getExamImage() const;
-
-	///
-	/// Name: GetRegionsFromEval  Returns the regions vector
-	/// @return: vector< CvRect >  The regions vector
-	///
-	std::vector< cv::Rect > getRegions();
-
-	/// 
-	/// Name: operator= Copies the ImageEvaluator class
-	///
-	/// @param: ImageEvaluator  ie  The ImageEvaluator object being copied
-	///
-	ImageEvaluator& operator=( const ImageEvaluator &nIE );
-
-	/**
-	 * Newer method - Reads from a filename and returns a completed
-	 *		AssignmentImage
-	 * 
-	 * @param	filename	The image filename
-	 * 
-	 * @return	AssignmentImage	Assignment Image formed from the read
-	 */
-	AssignmentImage readImage( std::string filename );
-
 	/**
 	 * Sets the name to be what was found from the exam image
 	 *
+	 * Naming works as follows, with delimiter '='
+	 * FIRSTNAME=MIDDLENAME=LASTNAME
+	 *
 	 * @postcondition	name has been set 
 	 */
-	void setName();
+	void readExamName();
 
+	
 	/**
 	 * Finds and sets the name letter regions on the exam
 	 *
@@ -149,7 +143,6 @@ public:
 	 */
 	char getNameLetter( cv::Rect nameLetterRegion );
 
-private:
 
 	/// The exam image being used 
 	cv::Mat examImage;
