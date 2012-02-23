@@ -1,3 +1,7 @@
-#pragma once
 
-#include "resource.h"
+#ifndef GRADESNAP_H_
+#define GRADESNAP_H_
+
+#include "DBManager.h"
+
+#endif

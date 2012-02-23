@@ -5,162 +5,76 @@
 #define DBMANAGER_H_
 
 
+
 // System header includes
 #include <string>
 #include <set>
+#include <vector>
+#include <map>
 
 // Local header includes
 #include "sqlite3.h"
 
-
 namespace DBManager {
 
-	//static sqlite3 *db;
-
 	// GENERAL FUNCTIONS
+
+typedef int (*callback_f)(void*,int,char**,char**);
+
+
+static int callback(  std::map< std::string, std::vector< std::string > > *map,
+	int argc, char **argv, char **azColName);
+
 
 
 	void db_init();
 
 	void db_close();
 
-	std::string getData( int primekey, std::string colField );
 
-	std::string getData( int primekey, int colField );
-
-	void setData( int primekey, std::string colField, std::string colValue );
-
-
-	// TEACHER
-
-	void makeTeacher( std::string name = "" );
-
-	void  removeTeacher( int teacherID );
-
-
-	int getTeacherIDFromName( std::string name = "" );
-
-
-	std::string  getTeacherName( int teacherID );
-
-
-	void addClassToTeacher( int teacherID, int classID );
-
-
-	void  removeClassFromTeacher( int teacherID, int classID );
-
-	void addStudentToTeacher( int teacherID, int studentID );
-
-	void removeStudentFromTeacher( int teacherID, int studentID );
-
-	std::set<std::string>  getClassesOfTeacher( int teacherID );
-
-
-	std::set<std::string> getStudentsOfTeacher( int teacherID );
-
-
-	// STUDENT
-
-	void makeStudent( std::string name = "" );
-
-
-	void removeStudent( int studentID );
-
-
-	int getStudentIDFromName( std::string name );
-
-
-	std::string getStudentName( int StudentID );
-
-
-	void addClasstoStudent( int studentID, int classID );
-
-
-	void removeClassFromStudent( int studentID, int classID );
-
-
-	void addAssignmentToStudent( int studentID, int assignmentID );
-
-	void removeAssignmentFromStudent( int studentID, int assignmentID );
-
-
-	std::set<std::string> getClassesOfStudent( int studentID );
-
-	std::set<std::string> getAssignmentsOfStudent( int studentID );
-
-
-
-	// ASSIGNMENT
-
-	void makeAssignment( std::string name = "" );
-
-	void removeAssignment( int assignmentID );
-
-	int getAssignmentIDFromName( std::string name );
-
-	std::string getAssignmentName( int id );
-
-
-	void addClasstoAssignment( int assignmentID, int classID );
-
-
-	void removeClassFromAssignment( int assignmentID, int classID );
-
-
-	void addStudentToAssignment( int assignmentID, int studentID );
-
-
-	void removeStudentFromAssignment( int assignmentID, int studentID );
-
-
-	std::set<std::string> getClassesOfAssignment( int assignmentID );
-
-
-	std::set<std::string> getStudentsOfAssignment( int assignmentID );
-
-
-	double getStudentGrade( int assignmentID, int studentID );
-
-
-	void setStudentGrade( int assignmentID, int studentID, double grade );
-
-
-	// CLASS
-
-	void makeClass( std::string name = "" );
-
-
-	void removeClass( int classID );
-
-
-	int getClassIDFromName( std::string name );
-
-
-	std::string getClassName( int classID );
-
-
-	void addStudentToClass( int classID, int studentID );
-
-	void removeStudentFromClass( int classID, int studentID );
-
-	void addAssignmentToClass( int classID, int assignmentID );
-
-
-	void  removeAssignmentFromClass( int classID, int assignmentID );
-
-	void addTeacherToClass( int classID, int teacherID );
-
-
-	void removeTeacherFromClass( int classID, int teacherID );
-
-
-	std::set<std::string> getStudentsOfClass( int classID );
-
-
-	std::set<std::string> getAssignmentsOfClass( int classID );
-
-
-	std::set<std::string> getTeachersOfClass( int classID );
+	// Links one data member to the other
+	void linkAToB(std::string tablename, int aID,
+		std::string aIDCol, int bID, std::string bIDCol );
+
+	// Unlinks where A and B are connected in the given tablename
+	void unlinkAFromB( std::string tablename, int aID, std::string aIDCol,
+		int bID, std::string bIDCol );
+
+	// Generalized make-thing method
+	void makeDataObject( std::string tablename, std::string name = "" );
+	
+	// Generalized remove-thing method
+	void removeDataObject( std::string tablename,
+		int objectID, std::string colID );
+
+	// Generalized set value method
+	void setDataObjectValue( std::string tablename, int objectID, 
+		std::string colID, std::string colValue );
+	
+
+	// Generalized get value method
+	std::string getDataObjectValue( std::string tablename, int objectID,
+		std::string colValue );
+
+	// 4a: Make generalized getID method
+	int getDataObjectID( std::string tablename, std::string colID,
+		std::string colValue );
+
+	
+	//5: Make generalized set AllValue method
+	void setEntireDataObjectValue( std::string tablename, int objectID,
+		std::string colID, std::string colValue );
+	
+	//6: Make gerneralized get AllValue method
+	
+	
+	//7: Make generalized getter - things-of-that method
+
+	
+	//8: Make generalized setter - things-of-that method
+	void setLinkedValues( std::string tablename, int aID, int bID,
+		std::string aIDCol, std::string bIDCol,
+		std::string commonCol, std::string commonColValue );
 
 };
 

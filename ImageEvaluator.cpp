@@ -7,7 +7,6 @@
 /// /////////////////////////////////////////////////////////////////
 
 //Local header includes
-#include "stdafx.h"
 #include "ImageEvaluator.h"
 #include "ImageReadException.h"
 

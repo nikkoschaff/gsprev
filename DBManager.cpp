@@ -1,240 +1,238 @@
 //
 //
+ 
 
 
-
-#include "stdafx.h"
 #include "DBManager.h"
 #include "sqlite3.h"
 
 using namespace std;
 
 #include <iostream>
+#include <sstream>
 
-
-// TODO SET UP THE GODDAMN POINTER
 static sqlite3 * db = NULL;
+
 
 // GENERAL FUNCTIONS
 
+// callback function
+static int DBManager::callback( map< string, vector< string > > *map, int argc, char **argv, char **azColName)
+{
+  int i;
+  for(i=0; i<argc; i++)
+  {
+    printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
+  }
+  printf("\n");
+  return 0;
+}
+
+
+
+// Initializes database
 void DBManager::db_init() {
-	int rc = sqlite3_open( "GSBackend.db", &db );
-	rc = sqlite3_open( "GSBackend.cb", &db );
+	int rc = sqlite3_open( "gsdb.db", &db );
+	rc = sqlite3_open( "gsdb.db", &db );
 	if ( rc ) {
 		cerr << "Error opening SQLite3 database: " << sqlite3_errmsg( db ) << endl;
 		sqlite3_close( db );
 	} else {
-		cout << "Opened GSBackend.db " << endl << endl;
+		cout << "Opened gsdb " << endl << endl;
 	}
 	
 
 }
 
+// Closes database
 void DBManager::db_close() {
 	sqlite3_close( db );
 }
 
 
-std::string DBManager::getData( int primekey, std::string colField ) {
-	return "";
+// Links one data member to the other
+void DBManager::linkAToB( string tablename, int aID, string aIDCol,
+	int bID, string bIDCol ) {
+	int rc;
+	char* error;
+	char **results = NULL;
+
+	string sqladdstring = "INSERT INTO " + tablename + " (aIDCol, bIDCol) VALUES ('aID', 'bID');";
+	const char* sqladd( sqladdstring.c_str() );
+	rc = sqlite3_exec( db, sqladd, reinterpret_cast<callback_f>(&callback), NULL, &error );
+	if ( rc ) {
+		cerr << "Error: " << sqlite3_errmsg( db ) << endl << endl;
+		sqlite3_free( error );
+	}
 }
 
-std::string DBManager::getData( int primekey, int colField ) {
-	return "";
+// Unlinks where A and B are connected in the given tablename
+void DBManager::unlinkAFromB( string tablename, int aID, string aIDCol,
+	int bID, string bIDCol ) {
+	int rc;
+	char* error;
+	char **results = NULL;
+
+	// Convert aID to string value for concatenation
+	std::string aIDValue;
+	std::stringstream aout;
+	aout << aID;
+	aIDValue = aout.str();
+	// Convert bID to string value for concatenation
+	std::string bIDValue;
+	std::stringstream bout;
+	bout << bID;
+	bIDValue = bout.str();
+
+	string sqldelstring = "DELETE FROM " + tablename + " WHERE " + aIDCol + "= '" + aIDValue + "' AND " +
+		bIDCol + " = '" + bIDValue + "';";
+
+	const char* sqlselect( sqldelstring.c_str() );
+	rc = sqlite3_exec( db, sqlselect, reinterpret_cast<callback_f>(&callback), NULL, &error );
+	if ( rc ) {
+		cerr << "Error: " << sqlite3_errmsg( db ) << endl << endl;
+		sqlite3_free( error );
+	}
 }
 
-void DBManager::setData( int primekey, std::string colField, std::string colValue ) {
+// Generalized make-thing method
+void DBManager::makeDataObject( string tablename,  std::string name ) {
+	int rc;
+	char* error;
+
+	string sqlinsertstring = "INSERT INTO " + tablename + " (name) VALUES('" + name + "');";
+	const char* sqlinsert( sqlinsertstring.c_str() );
+	rc = sqlite3_exec( db, sqlinsert, reinterpret_cast<callback_f>(&callback), NULL, &error );
+	if ( rc ) {
+		cerr << "Error: " << sqlite3_errmsg( db ) << endl << endl;
+		sqlite3_free( error );
+	} 
+}
+
 	
-}
+// Generalized remove-thing method
+void DBManager::removeDataObject( string tablename, int objectID, string colID ) {
+	int rc;
+	char* error;
+	char **results = NULL;
 
-/// TEACHER
+	// Convert object ID to string for concatenation
+	std::string oID;
+	std::stringstream out;
+	out << objectID;
+	oID = out.str();
 
+	string sqlselectstring = "DELETE FROM " + tablename + " WHERE " + colID + " = '" + oID  + "';";
 
-void DBManager::makeTeacher( std::string name ) {
-}
-
-
-void DBManager::removeTeacher( int teacherID ) {
-}
-
-
-int DBManager::getTeacherIDFromName( std::string name ) {
-	return -1;
-}
-
-
-std::string DBManager::getTeacherName( int teacherID ) {
-	return "";
-}
-
-
-void DBManager::addClassToTeacher( int teacherID, int classID ) {
-}
-
-
-void DBManager::removeClassFromTeacher( int teacherID, int classID ) {
-}
-
-
-std::set<std::string> DBManager::getStudentsOfTeacher( int teacherID ) {
-	return set<string>();
-}
-
-
-std::set<std::string> DBManager::getClassesOfTeacher( int teacherID ) {
-	return set<string>();
-}
-
-/// STUDENT
-
-
-void DBManager::makeStudent( std::string name ) {
-}
-
-
-void DBManager::removeStudent( int studentID ) {
-}
-
-
-int DBManager::getStudentIDFromName( std::string name ) {
-	return -1;
-}
-
-
-std::string DBManager::getStudentName( int StudentID ) {
-	return "";
-}
-
-
-void DBManager::addClasstoStudent( int studentID, int classID ) {
-}
-
-
-void DBManager::removeClassFromStudent( int studentID, int classID ) {
-}
-
-
-void DBManager::addAssignmentToStudent( int studentID, int assignmentID ) {
-}
-
-void DBManager::removeAssignmentFromStudent( int studentID, int assignmentID ) {
-}
-
-
-std::set<std::string> DBManager::getClassesOfStudent( int studentID ) {
-	return set<string>();
-}
-
-std::set<std::string> DBManager::getAssignmentsOfStudent( int studentID ) {
-	return set<string>();
-}
-
-
-/// ASSIGNMENT
-
-
-void DBManager::makeAssignment( std::string name ) {
-}
-
-void DBManager::removeAssignment( int assignmentID ) {
-}
-
-int DBManager::getAssignmentIDFromName( std::string name ) {
-	return -1;
-}
-
-std::string DBManager::getAssignmentName( int id ) {
-	return "";
-}
-
-
-void DBManager::addClasstoAssignment( int assignmentID, int classID ) {
-}
-
-
-void DBManager::removeClassFromAssignment( int assignmentID, int classID ) {
-}
-
-
-void DBManager::addStudentToAssignment( int assignmentID, int studentID ) {
-}
-
-
-void DBManager::removeStudentFromAssignment( int assignmentID, int studentID ) {
-}
-
-
-std::set<std::string> DBManager::getClassesOfAssignment( int assignmentID ) {
-	return set<string>();
-}
-
-
-std::set<std::string> DBManager::getStudentsOfAssignment( int assignmentID ) {
-	return set<string>();
-}
-
-
-double DBManager::getStudentGrade( int assignmentID, int studentID ) {
-	return -1;
-}
-
-
-void DBManager::setStudentGrade( int assignmentID, int studentID, double grade ) {
-}
-
-/// CLASS
-
-void DBManager::makeClass( std::string name ) {
+	const char* sqlselect( sqlselectstring.c_str() );
+	rc = sqlite3_exec( db, sqlselect, reinterpret_cast<callback_f>(&callback), NULL, &error );
+	if ( rc ) {
+		cerr << "Error: " << sqlite3_errmsg( db ) << endl << endl;
+		sqlite3_free( error );
+	}
 
 }
 
+	
+// Generalized set value method
+void DBManager::setDataObjectValue( string tablename, int objectID,
+	std::string colID, std::string colValue ) { 
+	int rc;
+	char* error;
+	char **results = NULL;
 
-void DBManager::removeClass( int classID ) {
+	std::string oID;
+	std::stringstream out;
+	out << objectID;
+	oID = out.str();
+
+	string sqlselectstring = "UPDATE " + tablename +
+		" SET " + colID + " = '" + colValue + "' WHERE  " + 
+		tablename + "ID = '" + oID + "';";
+
+	const char* sqlselect( sqlselectstring.c_str() );
+	rc = sqlite3_exec( db, sqlselect, reinterpret_cast<callback_f>(&callback), NULL, &error );
+	if ( rc ) {
+		cerr << "Error: " << sqlite3_errmsg( db ) << endl << endl;
+		sqlite3_free( error );
+	}
+
 }
 
+// Generalized get value method
+string DBManager::getDataObjectValue( string tablename, int objectID,
+	std::string colValue ) {
 
-int DBManager::getClassIDFromName( std::string name ) {
-	return -1;
+	int rc;
+	char* error;
+	char **results = NULL;
+	map< string, vector< char* > > valMap;
+
+
+	std::string objID;
+	std::stringstream out;
+	out << objectID;
+	string strOID = out.str();
+
+	string sqlselectstring = "SELECT " + colValue + " FROM " +
+		tablename + " WHERE " + colValue + " = '" + strOID + "';";
+
+
+	const char* sqlselect( sqlselectstring.c_str() );
+	rc = sqlite3_exec( db, sqlselect, reinterpret_cast< callback_f >( &callback ), (&valMap), &error );
+	if ( rc ) {
+		cerr << "Error: " << sqlite3_errmsg( db ) << endl << endl;
+		sqlite3_free( error );
+	}
+	return valMap.at( colValue ).at( 0 );
 }
 
-
-std::string DBManager::getClassName( int classID ) {
-	return "";
+// 4a: Make generalized getID method
+int DBManager::getDataObjectID( std::string tablename, std::string colID,
+	std::string colValue ) {
+		return -1;
 }
 
-
-void DBManager::addStudentToClass( int classID, int studentID ) {
+//5: Make generalized set AllValue method - TODO
+void DBManager::setEntireDataObjectValue( string tablename, int objectID,
+	std::string colID, std::string colValue ) {
 }
+	
+//6: Make gerneralized get AllValue method -TODO
+	
+	
+//7: Make generalized getter - things-of-that method -TODO
 
-void DBManager::removeStudentFromClass( int classID, int studentID ) {
-}
+	
+//8: Make generalized setter - things-of-that method -TODO
+void DBManager::setLinkedValues( string tablename, int aID, int bID,
+	std::string aIDCol, std::string bIDCol,
+	std::string commonCol, std::string commonColValue ) {
 
-void DBManager::addAssignmentToClass( int classID, int assignmentID ) {
-}
+	int rc;
+	char* error;
+	char **results = NULL;
 
-
-void DBManager::removeAssignmentFromClass( int classID, int assignmentID ) {
-}
-
-void DBManager::addTeacherToClass( int classID, int teacherID ) {
-}
-
-
-void DBManager::removeTeacherFromClass( int classID, int teacherID ) {
-}
-
-
-
-std::set<std::string> DBManager::getStudentsOfClass( int classID ) {
-	return set<string>();
-}
-
-
-std::set<std::string> DBManager::getAssignmentsOfClass( int classID ) {
-	return set<string>();
-}
+	// Set id values to string for concatenation
+	std::string strAID;
+	std::stringstream aout;
+	aout << aID;
+	strAID = aout.str();
+	std::string strBID;
+	std::stringstream bout;
+	bout << bID;
+	strBID = bout.str();
 
 
-std::set<std::string> DBManager::getTeachersOfClass( int classID ) {
-	return set<string>();
+	string sqlselectstring = "UPDATE " + tablename + " SET " + commonCol
+		+ " = '" + commonColValue + "' WHERE " + tablename + "ID = ";
+
+	const char* sqlselect( sqlselectstring.c_str() );
+	rc = sqlite3_exec( db, sqlselect, reinterpret_cast<callback_f>(&callback)
+		, NULL, &error );
+	if ( rc ) {
+		cerr << "Error: " << sqlite3_errmsg( db ) << endl << endl;
+		sqlite3_free( error );
+	}
+
 }

@@ -5,8 +5,6 @@
  *
  */
 
-#include "stdafx.h"
-
 #ifndef ImageManager_H_
 #define ImageManager_H_
 

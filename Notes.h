@@ -17,21 +17,33 @@ $$$3: Set standards
 ****4: TOOO assignment - set Key, score vector for students
 
 
-I: Stubbing & initial build
 
-	A: Teacher
-		1: Finish Teacher.cpp (DB)
+I: DB-STUFF (Issues)
+	A: Things I need to know how to do
+		8: HOW TO STORE SELECT DATA - WORK WITH CALLBACK
 
-	B: Class
-		1: Finish Class.cpp (DB)
+	B: Notes on doing stuff
+		1: When concatenating strings with integers, use output streams
 
-	C: Assignment
-		1: Finish Assignment.cpp (DB)
 
-	D: Student
-		1: Finish Student.cpp (DB)
+	C: Todos
+		1: Make generalized make-thing method
+		2: Make generalized remove-thing method
+		3: Make generalized set value method
+		4: Make gernalized get value method
+		5: Make generalied set AllValue method
+		6: Make gerneralized get AllValue method
+		7: Make generalized getter - things-of-that method
+		8: Make generalized setter - things-of-that method
 
-	E: EvalHelper
+
+II: Stubbing & initial build
+
+	A: DBManager - Finish 
+		// TODO make getter/setter functions for each - use generic methods up top
+
+
+	B: EvalHelper
 		1: Finish EvalHelper.cpp (filesystem, DB - finding studentID)
 
 III: Image Evaluator -> modify to work with new image, and apply needed changes

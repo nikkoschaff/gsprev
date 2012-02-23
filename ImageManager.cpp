@@ -6,10 +6,11 @@
  */
 
 // Local header includes
-#include "stdafx.h"
 #include "ImageManager.h"
 
 using namespace std;
+using namespace cv;
+
 
 // Constructor for ImageManager
 ImageManager::ImageManager( int assignmentId, vector< string > theFilenames )
@@ -49,7 +50,7 @@ void ImageManager::readAssignmentImage( std::string filename ) {
 	string studentName = answers.at( answers.size() - 1 );
 	answers.pop_back();
 	// Find the student's ID via DB query
-	int studentID = DBManager::getStudentIDFromName( studentName );
+	int studentID = DBManager::getDataObjectID( "Student", "name", studentName );
 
 	// TODO store resultant data in the database
 }
