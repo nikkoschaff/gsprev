@@ -42,7 +42,6 @@ void ImageManager::gradeEntireAssignment( bool extract ) {
 // Reads an image through ImageEvaluator, gets the resultant data tuple
 //		Then extracts and stores the data accordintly
 void ImageManager::readAssignmentImage( std::string filename ) {
-	// TODO find studentID from the name - LATER
 
 	// Read the image
 	vector< string > answers = imgEval.readExamImage( filename );
@@ -50,7 +49,7 @@ void ImageManager::readAssignmentImage( std::string filename ) {
 	string studentName = answers.at( answers.size() - 1 );
 	answers.pop_back();
 	// Find the student's ID via DB query
-	int studentID = DBManager::getDataObjectID( "Student", "name", studentName );
+	int studentID = DBManager::getDataObjectID( "Student", "name", studentName ).at( 0 );
 
 	// TODO store resultant data in the database
 }

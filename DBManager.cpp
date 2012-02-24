@@ -17,15 +17,35 @@ static sqlite3 * db = NULL;
 // GENERAL FUNCTIONS
 
 // callback function
-static int DBManager::callback( map< string, vector< string > > *map, int argc, char **argv, char **azColName)
-{
-  int i;
-  for(i=0; i<argc; i++)
-  {
-    printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
-  }
-  printf("\n");
-  return 0;
+static int DBManager::callback( map< string, vector< string > > *valmap,
+	int argc, char **argv, char **azColName) {
+	for(int i = 0; i<argc; i++) {
+
+
+		std::string azString;
+		std::stringstream azout;
+		azout << azColName[ i ];
+		azString = azout.str();
+
+		std::string argString;
+		std::stringstream argout;
+		argout << argv[ i ];
+		argString = argout.str();
+		
+		vector< string > v;
+		v.push_back( argString );
+
+		 // If found, it pushes one back.  If not, it makes a new and pushes back
+		map< string, vector< string > >::iterator it = valmap->find( azString );
+		if ( it != valmap->end() ) {
+			valmap->find( azString )->second.push_back( argString );
+		} else {
+			valmap->insert( pair< string, vector< string > >( azString,  v ) );
+		}
+		printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
+	}
+	printf("\n");
+	return 0;
 }
 
 
@@ -57,7 +77,19 @@ void DBManager::linkAToB( string tablename, int aID, string aIDCol,
 	char* error;
 	char **results = NULL;
 
-	string sqladdstring = "INSERT INTO " + tablename + " (aIDCol, bIDCol) VALUES ('aID', 'bID');";
+	// Convert aID to string value for concatenation
+	std::string aIDValue;
+	std::stringstream aout;
+	aout << aID;
+	aIDValue = aout.str();
+	// Convert bID to string value for concatenation
+	std::string bIDValue;
+	std::stringstream bout;
+	bout << bID;
+	bIDValue = bout.str();
+
+	string sqladdstring = "INSERT INTO " + tablename + " (" + aIDCol + ", "
+		+ bIDCol + ") VALUES ('" + aIDValue + "', '" + bIDValue + "'  );";
 	const char* sqladd( sqladdstring.c_str() );
 	rc = sqlite3_exec( db, sqladd, reinterpret_cast<callback_f>(&callback), NULL, &error );
 	if ( rc ) {
@@ -166,7 +198,7 @@ string DBManager::getDataObjectValue( string tablename, int objectID,
 	int rc;
 	char* error;
 	char **results = NULL;
-	map< string, vector< char* > > valMap;
+	map< string, vector< string > > valMap;
 
 
 	std::string objID;
@@ -175,7 +207,7 @@ string DBManager::getDataObjectValue( string tablename, int objectID,
 	string strOID = out.str();
 
 	string sqlselectstring = "SELECT " + colValue + " FROM " +
-		tablename + " WHERE " + colValue + " = '" + strOID + "';";
+		tablename + " WHERE " + tablename + "ID = '" + strOID + "';";
 
 
 	const char* sqlselect( sqlselectstring.c_str() );
@@ -184,27 +216,141 @@ string DBManager::getDataObjectValue( string tablename, int objectID,
 		cerr << "Error: " << sqlite3_errmsg( db ) << endl << endl;
 		sqlite3_free( error );
 	}
-	return valMap.at( colValue ).at( 0 );
+	string key( colValue );
+	if ( valMap.find( key )->second.at( 0 ).size() == 0 ) {
+		return "NULL";
+	} else {
+		string ret = valMap.find( key )->second.at( 0 );
+		return ret;
+	}
 }
 
-// 4a: Make generalized getID method
-int DBManager::getDataObjectID( std::string tablename, std::string colID,
+// Generalized getID method
+vector< int > DBManager::getDataObjectID( std::string tablename, std::string colID,
 	std::string colValue ) {
-		return -1;
+	int rc;
+	char* error;
+	char **results = NULL;
+	map< string, vector< string > > valMap;
+
+
+	string sqlselectstring = "SELECT " + tablename + "ID FROM " +
+		tablename + " WHERE " + colID + " = '" + colValue + "';";
+
+	const char* sqlselect( sqlselectstring.c_str() );
+	rc = sqlite3_exec( db, sqlselect, reinterpret_cast< callback_f >( &callback ), (&valMap), &error );
+	if ( rc ) {
+		cerr << "Error: " << sqlite3_errmsg( db ) << endl << endl;
+		sqlite3_free( error );
+	}
+	string key( tablename + "ID" );
+	vector< string > returnstr;
+
+
+	vector< int > returnint;
+	for( unsigned int i = 0; i < 	valMap.find( key )->second.at( 0 ).size(); i++ ) {
+		returnint.push_back( atoi( 	valMap.find( key )->second.at( i ).c_str() ) );
+	}
+
+	if ( returnint.size() == 0 ) {
+		returnint.push_back( -1 );
+	}
+
+	return returnint;
 }
 
-//5: Make generalized set AllValue method - TODO
-void DBManager::setEntireDataObjectValue( string tablename, int objectID,
+// Generalized set AllValue method - Sets every row with the colID to colValue
+void DBManager::setAllDataObjectValues( string tablename,
 	std::string colID, std::string colValue ) {
+
+	int rc;
+	char* error;
+	char **results = NULL;
+
+
+	string sqlselectstring = "UPDATE " + tablename +
+		" SET " + colID + " = '" + colValue + "';";
+
+	const char* sqlselect( sqlselectstring.c_str() );
+	rc = sqlite3_exec( db, sqlselect, reinterpret_cast<callback_f>(&callback), NULL, &error );
+	if ( rc ) {
+		cerr << "Error: " << sqlite3_errmsg( db ) << endl << endl;
+		sqlite3_free( error );
+	}
+
+
 }
 	
-//6: Make gerneralized get AllValue method -TODO
-	
-	
-//7: Make generalized getter - things-of-that method -TODO
+// Generalized get all values in the specified column category in the table
+vector< string > DBManager::getAllDataObjectValues( string tablename, string colID ) {
 
+	int rc;
+	char* error;
+	char **results = NULL;
+	map< string, vector< string > > valMap;
+
+	string sqlselectstring = "SELECT " + colID + " FROM " +
+		tablename + ";";
+
+
+	const char* sqlselect( sqlselectstring.c_str() );
+	rc = sqlite3_exec( db, sqlselect, reinterpret_cast< callback_f >( &callback ), (&valMap), &error );
+	if ( rc ) {
+		cerr << "Error: " << sqlite3_errmsg( db ) << endl << endl;
+		sqlite3_free( error );
+	}
+
+	// Convert char* values to string
+	vector< string > values;
+	for( unsigned int i = 0; i < valMap.at( colID ).size(); i++ ) {
+		values.push_back( valMap.at( colID  ).at( i ) );
+	}
+	return values;
+}
 	
-//8: Make generalized setter - things-of-that method -TODO
+// Generalized linked getter - returns all IDs where both aID and bID exist
+std::vector< std::string > DBManager::getLinkedValues( std::string tablename,
+	int aID, int bID, string aCol, string bCol ) {
+
+	int rc;
+	char* error;
+	char **results = NULL;
+	map< string, vector< string > > valMap;
+
+
+	// Convert object ID to string for concatenation
+	std::string aColID;
+	std::stringstream aout;
+	aout << aID;
+	aColID = aout.str();
+	// Convert object ID to string for concatenation
+	std::string bColID;
+	std::stringstream bout;
+	bout << bID;
+	bColID = bout.str();
+
+	// Get all the IDs
+	string sqlselectstring = "SELECT " + tablename + "ID FROM " + tablename + " WHERE " +
+		 aCol + " = '" + aColID + "' AND " + bCol + " = '" + bColID + "';";
+
+
+	const char* sqlselect( sqlselectstring.c_str() );
+	rc = sqlite3_exec( db, sqlselect, reinterpret_cast< callback_f >( &callback ), (&valMap), &error );
+	if ( rc ) {
+		cerr << "Error: " << sqlite3_errmsg( db ) << endl << endl;
+		sqlite3_free( error );
+	}
+
+	// Convert char* values to string
+	vector< string > values;
+	for( unsigned int i = 0; i < valMap.at( tablename + "ID" ).size(); i++ ) {
+		values.push_back( valMap.at( tablename + "ID" ).at( i ) );
+	}
+	return values;
+}
+	
+// Generalized linked setter - sets all rows at commoncol to commonvalue
+//	where both aID and bID exist
 void DBManager::setLinkedValues( string tablename, int aID, int bID,
 	std::string aIDCol, std::string bIDCol,
 	std::string commonCol, std::string commonColValue ) {
@@ -212,24 +358,25 @@ void DBManager::setLinkedValues( string tablename, int aID, int bID,
 	int rc;
 	char* error;
 	char **results = NULL;
+	map< string, vector< string > > valMap;
 
 	// Set id values to string for concatenation
-	std::string strAID;
+	std::string aColID;
 	std::stringstream aout;
 	aout << aID;
-	strAID = aout.str();
-	std::string strBID;
+	aColID = aout.str();
+	std::string bColID;
 	std::stringstream bout;
 	bout << bID;
-	strBID = bout.str();
-
+	bColID = bout.str();
 
 	string sqlselectstring = "UPDATE " + tablename + " SET " + commonCol
-		+ " = '" + commonColValue + "' WHERE " + tablename + "ID = ";
+		+ " = '" + commonColValue + "' WHERE "
+		+ aIDCol + " = '" + aColID + "' AND " + bIDCol + " = '" + bColID + "';";
 
 	const char* sqlselect( sqlselectstring.c_str() );
 	rc = sqlite3_exec( db, sqlselect, reinterpret_cast<callback_f>(&callback)
-		, NULL, &error );
+		, (&valMap), &error );
 	if ( rc ) {
 		cerr << "Error: " << sqlite3_errmsg( db ) << endl << endl;
 		sqlite3_free( error );

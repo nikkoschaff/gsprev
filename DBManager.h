@@ -11,6 +11,8 @@
 #include <set>
 #include <vector>
 #include <map>
+#include <tchar.h>
+
 
 // Local header includes
 #include "sqlite3.h"
@@ -19,18 +21,18 @@ namespace DBManager {
 
 	// GENERAL FUNCTIONS
 
-typedef int (*callback_f)(void*,int,char**,char**);
+	// Typedef to allow callback to use any type of pointer for first arg
+	typedef int (*callback_f)(void*,int,char**,char**);
 
+	// Callback function for response from db action
+	static int callback(  std::map< std::string, std::vector< std::string > > *valmap,
+		int argc, char **argv, char **azColName);
 
-static int callback(  std::map< std::string, std::vector< std::string > > *map,
-	int argc, char **argv, char **azColName);
-
-
-
+	// Opens the database
 	void db_init();
 
+	// Closes the database
 	void db_close();
-
 
 	// Links one data member to the other
 	void linkAToB(std::string tablename, int aID,
@@ -51,27 +53,28 @@ static int callback(  std::map< std::string, std::vector< std::string > > *map,
 	void setDataObjectValue( std::string tablename, int objectID, 
 		std::string colID, std::string colValue );
 	
-
 	// Generalized get value method
 	std::string getDataObjectValue( std::string tablename, int objectID,
 		std::string colValue );
 
-	// 4a: Make generalized getID method
-	int getDataObjectID( std::string tablename, std::string colID,
+	// Generalized getID method
+	std::vector< int > getDataObjectID( std::string tablename, std::string colID,
 		std::string colValue );
 
-	
-	//5: Make generalized set AllValue method
-	void setEntireDataObjectValue( std::string tablename, int objectID,
+	// Generalized set AllValue method - Sets every row with the colID to colValue
+	void setAllDataObjectValues( std::string tablename, 
 		std::string colID, std::string colValue );
 	
-	//6: Make gerneralized get AllValue method
+	// Generalized get all values in the specified column category in the table
+	std::vector< std::string > getAllDataObjectValues( std::string tablename,
+		std::string colID );
 	
-	
-	//7: Make generalized getter - things-of-that method
+	// Generalized linked getter - returns all IDs where both aID and bID exist
+	std::vector< std::string > getLinkedValues( std::string tablename,
+		int aID, int bID, std::string aCol, std::string bCol );
 
-	
-	//8: Make generalized setter - things-of-that method
+	// Generalized linked setter - sets all rows at commoncol to commonvalue 
+	//	where both aID and bID exist
 	void setLinkedValues( std::string tablename, int aID, int bID,
 		std::string aIDCol, std::string bIDCol,
 		std::string commonCol, std::string commonColValue );
