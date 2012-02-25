@@ -22,8 +22,6 @@ I: TODO
 	input *******MUST******* already know the IDs, or else it will completely crash and burn
 	when it tries to predict them.
 			->getIDfromValue *may* possibly be a useless or unpredictable function
-3:	Grades don't seem to be accurate when setting in DB.  See if it's a translation problem
-	or if they're not being graded properly from the get-go
 
 
 
