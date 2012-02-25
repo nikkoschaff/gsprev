@@ -8,7 +8,12 @@
 #include <sstream>
 #include "DBManager.h"
 
-
+// Takes information to compare and grade.  The functions to grade are only
+//	reliant on input.  They require a key (explicit or ID if info is in XML),
+//	assignmentID, answers ( studentID and answers, explicit or ID if info is in XML).
+//	After comparing responses to key, the data is then stored in the database, including
+//	storage of grade and responses
+//	Grades are stored as a value out of 100, so a 95% result will be stored as 95
 namespace Grader {
 
 	// Main lead-in function for grading
