@@ -1,5 +1,5 @@
 /**
- * ImageManager.cpp : Implementation for the ImageManager class
+ * ImageManager.cpp : Implementation for the ImageManager namespace
  *
  * @author Nikko Schaff
  * 
@@ -9,53 +9,25 @@
 #include "ImageManager.h"
 
 using namespace std;
-using namespace cv;
-
-
-// Constructor for ImageManager
-ImageManager::ImageManager( int assignmentId, vector< string > theFilenames )
-:assignmentID( assignmentId ), filenames( theFilenames ),imgEval( 20 ) {
-	// TODO FIND NUM QUESTIONS FROM ASSIGNMENT
-}
-
-// Desctructor for ImageManager
-ImageManager::~ImageManager() {
-}
-
 
 // Grades the assignment by making an AssignmentImage through
 //		ImageEvaluator, then extracing the data and placing it in the 
 //		Assignment, for every image in the imagefile
-void ImageManager::gradeEntireAssignment( bool extract ) {
+	std::pair< std::vector< std::string >,
+		std::vector< std::vector< std::string > > > 
+	ImageManager::readAssignmentSetFromImage( std::string theKeyFilename,
+		std::vector< std::string > theFilenames, int numQ  ) {
 
-	// First makes sure all files are in the filesystem and extracts extras
-	// If chosen
-	synchWithFilesystem( extract );
+	ImageEvaluator imgEval( numQ );
+	vector< string > keyAnswers( imgEval.readExamImage( theKeyFilename ) );
+	vector< vector< string > > studentAnswers;
 
-	// Lets the helper method do the reading and storage
-	for( unsigned int i = 0; i < filenames.size(); i++ ) {
-		readAssignmentImage( filenames.at( i ) );
+	// Reads through each and gets the answers
+	for( unsigned int i = 0; i < theFilenames.size(); i++ ) {
+		studentAnswers.push_back( ( imgEval.readExamImage( theFilenames.at( i ) ) ) );
 	}
 
+	return pair< vector< string >,
+		vector< vector< string > > >( keyAnswers, studentAnswers );
 }
 
-// Reads an image through ImageEvaluator, gets the resultant data tuple
-//		Then extracts and stores the data accordintly
-void ImageManager::readAssignmentImage( std::string filename ) {
-
-	// Read the image
-	vector< string > answers = imgEval.readExamImage( filename );
-	// Store the name found from imgEval and remove it from the vector
-	string studentName = answers.at( answers.size() - 1 );
-	answers.pop_back();
-	// Find the student's ID via DB query
-	int studentID = DBManager::getDataObjectID( "Student", "name", studentName ).at( 0 );
-
-	// TODO store resultant data in the database
-}
-
-// Synchs files to be into the fileystem, and extracts ones there if specified
-void ImageManager::synchWithFilesystem( bool extract ) {
-	// TODO - Wait for FSManager to be finished first
-	// TODO - ensure that the new filenames are the ones brought back from FSM
-}

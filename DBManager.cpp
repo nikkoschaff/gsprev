@@ -42,9 +42,9 @@ static int DBManager::callback( map< string, vector< string > > *valmap,
 		} else {
 			valmap->insert( pair< string, vector< string > >( azString,  v ) );
 		}
-		printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
+		//printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
 	}
-	printf("\n");
+	//printf("\n");
 	return 0;
 }
 
@@ -58,7 +58,7 @@ void DBManager::db_init() {
 		cerr << "Error opening SQLite3 database: " << sqlite3_errmsg( db ) << endl;
 		sqlite3_close( db );
 	} else {
-		cout << "Opened gsdb " << endl << endl;
+		//cout << "Opened gsdb " << endl << endl;
 	}
 	
 

@@ -75,7 +75,7 @@ vector< string > ImageEvaluator::readExamImage( string filename ) {
 	readExamAnswers();
 
 	// Sets the name as a string specified in the header
-	//readExamName();
+	readExamName();
 
 	// Pushes the name to the last region in the vector
 	answersVector.push_back( name );
@@ -88,12 +88,8 @@ vector< string > ImageEvaluator::readExamImage( string filename ) {
 /// Reads and interprets the exam, returning the answers
 vector< string > ImageEvaluator::readExamAnswers() {
 
-	// Answer regions within the test
-	vector< Rect > answerRegions( numQuestions );
-
 	// Calculate the answer regions
 	cv_setAnswerRegions();
-
 	// Vector of answers for each question at index
 	answersVector = vector< string >( numQuestions );
 
@@ -101,16 +97,15 @@ vector< string > ImageEvaluator::readExamAnswers() {
 	for( int i = 0; i < numQuestions; i++ ) {
 		answersVector.at( i ) = cv_getAnswer( regions.at( i ) );
 	}
-
 	return answersVector;
 }
 
 
 // Sets the name to be what was found in the exam image
 // TODO (later with new image) finish
-void readExamName() {
+void ImageEvaluator::readExamName() {
 	// TODO later
-
+	name = "(No Name)";
 	//setNameLetterRegions();
 
 }
@@ -149,9 +144,6 @@ void ImageEvaluator::setImage( string eFilename ) {
 /// Makes and returns a vector of ROIs for each answer region
 void ImageEvaluator::cv_setAnswerRegions() {
 
-	// Answer regions within the test
-	regions = vector< Rect >( numQuestions );
-
 	// Calculate and find each question ROI within range of numQuestions
 
 	// x offset for main bounding box
@@ -178,13 +170,12 @@ void ImageEvaluator::cv_setAnswerRegions() {
 	
 	// --------------------- END
 
-
 	//Find the ROIs located at each position
-	for ( int numQ = 0; numQ <= numQuestions; numQ++ ) {
+	for ( int numQ = 0; numQ < numQuestions; numQ++ ) {
 		// Create and store ROI
-		CvRect answerRegion = { int( relativeX ), int( relativeY ), 
+		Rect answerRegion ( int( relativeX ), int( relativeY ), 
 			int( double( QUESTION_ROI_WIDTH ) * resRatioWidth ),
-			int( double( QUESTION_ROI_HEIGHT ) * resRatioHeight ) };
+			int( double( QUESTION_ROI_HEIGHT ) * resRatioHeight ) );
 		// Stores the answer region ROI into the vector
 		regions.at( numQ ) = answerRegion;
 
@@ -231,7 +222,6 @@ string ImageEvaluator::cv_getAnswer( Rect answerRegion ) {
 	double modified;
 	// Scalar value of the pixel at chosen location
 	Scalar intensity;
-	// NOTE: If needed, could use dereferencing to get value.
 
 	//For each subdivision
 	for( int a = 0; a < 5; a++ ) {

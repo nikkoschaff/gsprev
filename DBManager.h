@@ -46,6 +46,7 @@ namespace DBManager {
 	void makeDataObject( std::string tablename, std::string name = "" );
 	
 	// Generalized remove-thing method
+	// TODO - could do without colID - already knows colname
 	void removeDataObject( std::string tablename,
 		int objectID, std::string colID );
 
