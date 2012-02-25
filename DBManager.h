@@ -34,16 +34,11 @@ namespace DBManager {
 	// Closes the database
 	void db_close();
 
-	// Links one data member to the other
-	void linkAToB(std::string tablename, int aID,
-		std::string aIDCol, int bID, std::string bIDCol );
 
-	// Unlinks where A and B are connected in the given tablename
-	void unlinkAFromB( std::string tablename, int aID, std::string aIDCol,
-		int bID, std::string bIDCol );
 
 	// Generalized make-thing method
-	void makeDataObject( std::string tablename, std::string name = "" );
+	// Returns the row the object was made at
+	int makeDataObject( std::string tablename, std::string name = "" );
 	
 	// Generalized remove-thing method
 	// TODO - could do without colID - already knows colname
@@ -70,6 +65,14 @@ namespace DBManager {
 	std::vector< std::string > getAllDataObjectValues( std::string tablename,
 		std::string colID );
 	
+	// Links one data member to the other
+	void linkAToB(std::string tablename, int aID,
+		std::string aIDCol, int bID, std::string bIDCol );
+
+	// Unlinks where A and B are connected in the given tablename
+	void unlinkAFromB( std::string tablename, int aID, std::string aIDCol,
+		int bID, std::string bIDCol );
+
 	// Generalized linked getter - returns all IDs where both aID and bID exist
 	std::vector< std::string > getLinkedValues( std::string tablename,
 		int aID, int bID, std::string aCol, std::string bCol );

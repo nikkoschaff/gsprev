@@ -8,37 +8,18 @@ $$$1: TODO reflect changes:
 $$$3: Set standards
 
 I: TODO
+	A: Verify: store answers after directly after grading - good or bad idea?
 
-
-1: The ID-getter only goes to the first possible one.  Other problems show up	
-	like blanks table spaces, but that's because only the first IDNUM in the full
-	possible set gets returned.  This should either be changed or at least understood
-	throughout the program
-2: The Model, when working with new inputs within the system, MUST, I REPEAT, MUST know
-	everything about the associations as they need to know to extrapolate.  Although
-	having the user select from a displayed list the options that reflect db entries,
-	and letting that list send through to the model is easy to work with and doesn't
-	involve searching or predicting, any action within the model that doesn't have user
-	input *******MUST******* already know the IDs, or else it will completely crash and burn
-	when it tries to predict them.
-			->getIDfromValue *may* possibly be a useless or unpredictable function
-
-
-
-	A: Better ID-maker in GS
-	C: Finish GSM printresults()
-
-
-	A: Make table/db clearing function in DBM
-	B: Clear table/db at onset after load in GS
-
-
+	B: Problem - Using names as a way to store new stuff in the DB is a bad idea
+		-> Any identical names just throw it all off.  
+		Solution? 
+			-> Make the makeDataObject method return the interger value of new row
 
 II: Database concerns
 	1: What happens if searching out of index or availability? (or at a table that doesn't exist)
 		-> BREAKS if asking for something that doesn't exist
 	2: It's easy to have linked duplicates.  Would that also unnecessarily duplicate searches?
-
+	
 
 
 III: Image Evaluator -> modify to work with new image, and apply needed changes

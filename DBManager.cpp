@@ -70,65 +70,9 @@ void DBManager::db_close() {
 }
 
 
-// Links one data member to the other
-void DBManager::linkAToB( string tablename, int aID, string aIDCol,
-	int bID, string bIDCol ) {
-	int rc;
-	char* error;
-	char **results = NULL;
-
-	// Convert aID to string value for concatenation
-	std::string aIDValue;
-	std::stringstream aout;
-	aout << aID;
-	aIDValue = aout.str();
-	// Convert bID to string value for concatenation
-	std::string bIDValue;
-	std::stringstream bout;
-	bout << bID;
-	bIDValue = bout.str();
-
-	string sqladdstring = "INSERT INTO " + tablename + " (" + aIDCol + ", "
-		+ bIDCol + ") VALUES ('" + aIDValue + "', '" + bIDValue + "'  );";
-	const char* sqladd( sqladdstring.c_str() );
-	rc = sqlite3_exec( db, sqladd, reinterpret_cast<callback_f>(&callback), NULL, &error );
-	if ( rc ) {
-		cerr << "Error: " << sqlite3_errmsg( db ) << endl << endl;
-		sqlite3_free( error );
-	}
-}
-
-// Unlinks where A and B are connected in the given tablename
-void DBManager::unlinkAFromB( string tablename, int aID, string aIDCol,
-	int bID, string bIDCol ) {
-	int rc;
-	char* error;
-	char **results = NULL;
-
-	// Convert aID to string value for concatenation
-	std::string aIDValue;
-	std::stringstream aout;
-	aout << aID;
-	aIDValue = aout.str();
-	// Convert bID to string value for concatenation
-	std::string bIDValue;
-	std::stringstream bout;
-	bout << bID;
-	bIDValue = bout.str();
-
-	string sqldelstring = "DELETE FROM " + tablename + " WHERE " + aIDCol + "= '" + aIDValue + "' AND " +
-		bIDCol + " = '" + bIDValue + "';";
-
-	const char* sqlselect( sqldelstring.c_str() );
-	rc = sqlite3_exec( db, sqlselect, reinterpret_cast<callback_f>(&callback), NULL, &error );
-	if ( rc ) {
-		cerr << "Error: " << sqlite3_errmsg( db ) << endl << endl;
-		sqlite3_free( error );
-	}
-}
 
 // Generalized make-thing method
-void DBManager::makeDataObject( string tablename,  std::string name ) {
+int DBManager::makeDataObject( string tablename,  std::string name ) {
 	int rc;
 	char* error;
 
@@ -139,6 +83,9 @@ void DBManager::makeDataObject( string tablename,  std::string name ) {
 		cerr << "Error: " << sqlite3_errmsg( db ) << endl << endl;
 		sqlite3_free( error );
 	} 
+
+	int recent = sqlite3_last_insert_rowid( db );
+	return recent;
 }
 
 	
@@ -146,7 +93,7 @@ void DBManager::makeDataObject( string tablename,  std::string name ) {
 void DBManager::removeDataObject( string tablename, int objectID, string colID ) {
 	int rc;
 	char* error;
-	char **results = NULL;
+	
 
 	// Convert object ID to string for concatenation
 	std::string oID;
@@ -157,7 +104,7 @@ void DBManager::removeDataObject( string tablename, int objectID, string colID )
 	string sqlselectstring = "DELETE FROM " + tablename + " WHERE " + colID + " = '" + oID  + "';";
 
 	const char* sqlselect( sqlselectstring.c_str() );
-	rc = sqlite3_exec( db, sqlselect, reinterpret_cast<callback_f>(&callback), NULL, &error );
+	rc = sqlite3_exec( db, sqlselect, NULL, NULL, &error );
 	if ( rc ) {
 		cerr << "Error: " << sqlite3_errmsg( db ) << endl << endl;
 		sqlite3_free( error );
@@ -171,7 +118,7 @@ void DBManager::setDataObjectValue( string tablename, int objectID,
 	std::string colID, std::string colValue ) { 
 	int rc;
 	char* error;
-	char **results = NULL;
+	
 
 	std::string oID;
 	std::stringstream out;
@@ -183,7 +130,7 @@ void DBManager::setDataObjectValue( string tablename, int objectID,
 		tablename + "ID = '" + oID + "';";
 
 	const char* sqlselect( sqlselectstring.c_str() );
-	rc = sqlite3_exec( db, sqlselect, reinterpret_cast<callback_f>(&callback), NULL, &error );
+	rc = sqlite3_exec( db, sqlselect, NULL, NULL, &error );
 	if ( rc ) {
 		cerr << "Error: " << sqlite3_errmsg( db ) << endl << endl;
 		sqlite3_free( error );
@@ -197,7 +144,7 @@ string DBManager::getDataObjectValue( string tablename, int objectID,
 
 	int rc;
 	char* error;
-	char **results = NULL;
+	
 	map< string, vector< string > > valMap;
 
 
@@ -230,7 +177,7 @@ vector< int > DBManager::getDataObjectID( std::string tablename, std::string col
 	std::string colValue ) {
 	int rc;
 	char* error;
-	char **results = NULL;
+	
 	map< string, vector< string > > valMap;
 
 
@@ -265,14 +212,14 @@ void DBManager::setAllDataObjectValues( string tablename,
 
 	int rc;
 	char* error;
-	char **results = NULL;
+	
 
 
 	string sqlselectstring = "UPDATE " + tablename +
 		" SET " + colID + " = '" + colValue + "';";
 
 	const char* sqlselect( sqlselectstring.c_str() );
-	rc = sqlite3_exec( db, sqlselect, reinterpret_cast<callback_f>(&callback), NULL, &error );
+	rc = sqlite3_exec( db, sqlselect, NULL, NULL, &error );
 	if ( rc ) {
 		cerr << "Error: " << sqlite3_errmsg( db ) << endl << endl;
 		sqlite3_free( error );
@@ -286,7 +233,7 @@ vector< string > DBManager::getAllDataObjectValues( string tablename, string col
 
 	int rc;
 	char* error;
-	char **results = NULL;
+	
 	map< string, vector< string > > valMap;
 
 	string sqlselectstring = "SELECT " + colID + " FROM " +
@@ -308,13 +255,71 @@ vector< string > DBManager::getAllDataObjectValues( string tablename, string col
 	return values;
 }
 	
+// Links one data member to the other
+void DBManager::linkAToB( string tablename, int aID, string aIDCol,
+	int bID, string bIDCol ) {
+	int rc;
+	char* error;
+	
+
+	// Convert aID to string value for concatenation
+	std::string aIDValue;
+	std::stringstream aout;
+	aout << aID;
+	aIDValue = aout.str();
+	// Convert bID to string value for concatenation
+	std::string bIDValue;
+	std::stringstream bout;
+	bout << bID;
+	bIDValue = bout.str();
+
+	string sqladdstring = "INSERT INTO " + tablename + " (" + aIDCol + ", "
+		+ bIDCol + ") VALUES ('" + aIDValue + "', '" + bIDValue + "'  );";
+	const char* sqladd( sqladdstring.c_str() );
+	rc = sqlite3_exec( db, sqladd, NULL, NULL, &error );
+	if ( rc ) {
+		cerr << "Error: " << sqlite3_errmsg( db ) << endl << endl;
+		sqlite3_free( error );
+	}
+}
+
+// Unlinks where A and B are connected in the given tablename
+void DBManager::unlinkAFromB( string tablename, int aID, string aIDCol,
+	int bID, string bIDCol ) {
+	int rc;
+	char* error;
+	
+
+	// Convert aID to string value for concatenation
+	std::string aIDValue;
+	std::stringstream aout;
+	aout << aID;
+	aIDValue = aout.str();
+	// Convert bID to string value for concatenation
+	std::string bIDValue;
+	std::stringstream bout;
+	bout << bID;
+	bIDValue = bout.str();
+
+	string sqldelstring = "DELETE FROM " + tablename + " WHERE " + aIDCol + "= '" + aIDValue + "' AND " +
+		bIDCol + " = '" + bIDValue + "';";
+
+	const char* sqlselect( sqldelstring.c_str() );
+	rc = sqlite3_exec( db, sqlselect, NULL, NULL, &error );
+	if ( rc ) {
+		cerr << "Error: " << sqlite3_errmsg( db ) << endl << endl;
+		sqlite3_free( error );
+	}
+}
+
+
 // Generalized linked getter - returns all IDs where both aID and bID exist
 std::vector< std::string > DBManager::getLinkedValues( std::string tablename,
 	int aID, int bID, string aCol, string bCol ) {
 
 	int rc;
 	char* error;
-	char **results = NULL;
+	
 	map< string, vector< string > > valMap;
 
 
@@ -349,6 +354,7 @@ std::vector< std::string > DBManager::getLinkedValues( std::string tablename,
 	return values;
 }
 	
+
 // Generalized linked setter - sets all rows at commoncol to commonvalue
 //	where both aID and bID exist
 void DBManager::setLinkedValues( string tablename, int aID, int bID,
@@ -357,8 +363,7 @@ void DBManager::setLinkedValues( string tablename, int aID, int bID,
 
 	int rc;
 	char* error;
-	char **results = NULL;
-	map< string, vector< string > > valMap;
+	
 
 	// Set id values to string for concatenation
 	std::string aColID;
@@ -375,8 +380,7 @@ void DBManager::setLinkedValues( string tablename, int aID, int bID,
 		+ aIDCol + " = '" + aColID + "' AND " + bIDCol + " = '" + bColID + "';";
 
 	const char* sqlselect( sqlselectstring.c_str() );
-	rc = sqlite3_exec( db, sqlselect, reinterpret_cast<callback_f>(&callback)
-		, (&valMap), &error );
+	rc = sqlite3_exec( db, sqlselect, NULL, NULL, &error );
 	if ( rc ) {
 		cerr << "Error: " << sqlite3_errmsg( db ) << endl << endl;
 		sqlite3_free( error );

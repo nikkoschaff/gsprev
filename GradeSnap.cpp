@@ -179,50 +179,48 @@ int main ( int argc, char* argv[] ) {
 
 	
 	// --- TOP LEVEL ----  
-	// 1: Creates by default "Example Class"
-	//DBManager::makeDataObject( "Class", "Example Class" );
-	int classID = 1;//DBManager::getDataObjectID( "Class", "name", "Example Class" ).at( 0 );
-	// 2: Creates the assignment "Example Test"
-	//DBManager::makeDataObject( "Assignment", "Example Test" );
+	int classID = 1;
 	int assignmentID = 1;
-		//DBManager::getDataObjectID( "Assignment", "name", "Example Test" ).at( 0 );
-	// 3: Links assignment to class TODO
-	//DBManager::linkAToB( "LinkerClassAssignment", classID, "ClassID", assignmentID,
-	//	"AssignmentID" );
-	//  set numquestions
-	//stringstream ss;
-	//ss << numQuestions;
-	//string numQString = ss.str();
-		
-	//DBManager::setDataObjectValue( "Assignment",
-	//	assignmentID, "numQuestions", numQString );
-
-
 
 	// Create key, link to assignment, set filename
-	DBManager::makeDataObject( "Student", keyFilename );
-	int keyID = DBManager::getDataObjectID( "Student", "name", keyFilename ).at( 0 );
+	int keyID =	DBManager::makeDataObject( "Student", keyFilename );
+
 	DBManager::linkAToB( "LinkerStudentAssignment", assignmentID, "AssignmentID", 
 		keyID, "StudentID" );
-	DBManager::setDataObjectValue( "LinkerStudentAssignment", keyID, "filename", keyFilename);
-	DBManager::setDataObjectValue( "LinkerStudentAssignment", keyID, "key", "YES" );
+	DBManager::setLinkedValues( "LinkerStudentAssignment", keyID, assignmentID, 
+		"StudentID", "AssignmentID", "key", "YES" );
+	DBManager::setLinkedValues( "LinkerStudentAssignment", keyID, assignmentID,
+		"StudentID", "AssignmentID", "filename", keyFilename );
 
+	// Pair for use in the model
+	pair< int, string > keyFilePair( keyID, keyFilename );
+
+	// Vector of pairs for the student IDs and filenames
+	vector< pair< int, string > > studentFilePairs;
+	// Vector of student IDs
+	vector< int > studentIDs;
+
+	// Gets student IDs by setting them to be in the DB and finding their ID
+	//	Links the necessary student data and pushes their info into the pair vector
 	for( unsigned int i = 0; i < studentExamFilenames.size(); i++ ) {
 		string name = studentExamFilenames.at( i );
 
-		DBManager::makeDataObject( "Student", name );
-		int sID = DBManager::getDataObjectID( "Student", "name", name ).at( 0 );
+		// Extracts information about the studentID and places corresponding
+		//	student data into the database
+		int sID = DBManager::makeDataObject( "Student", name );
 		DBManager::linkAToB( "LinkerStudentAssignment", assignmentID, "AssignmentID", 
 			sID, "StudentID" );
 		DBManager::linkAToB( "LinkerClassStudent", classID, "ClassID", sID, "StudentID" );
-		DBManager::setDataObjectValue( "LinkerStudentAssignment", sID, "filename",
-			name );
-	
+		DBManager::setLinkedValues( "LinkerStudentAssignment", sID, assignmentID,
+			"StudentID", "AssignmentID", "filename", name );
+		// Pushes student ID and name to the student pair vector
+		studentFilePairs.push_back( pair< int, string >( sID, name ) );
+		studentIDs.push_back( sID );
 	}
 
 	GradeSnapModel gsm;
-	gsm.evaluateImage( assignmentID, classID, keyFilename, studentExamFilenames );
-	gsm.printResults( assignmentID, classID, keyFilename );
+	gsm.evaluateImage( assignmentID, classID, keyFilePair, studentFilePairs, numQuestions );
+	gsm.printResults( assignmentID, classID, keyID, studentIDs  );
 
 
 	int x;

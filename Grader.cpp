@@ -33,6 +33,17 @@ void Grader::grade( int assignmentID, std::pair< int, std::vector< std::string >
 	DBManager::setLinkedValues( "LinkerStudentAssignment", sID, assignmentID, 
 		"StudentID", "AssignmentID", "grade", stringScore );
 	}
+
+	string s;
+	for( unsigned int i = 0; i < keyAnswers.second.size(); i++ ) {
+		s.append( keyAnswers.second.at( i ) );
+		s.append( "," );
+	}
+
+	// Store the key results for reference
+	DBManager::setDataObjectValue( "LinkerStudentAssignment", keyAnswers.first,
+		"answers", s );
+
 }
 
 // Helper to grade a single assignment
