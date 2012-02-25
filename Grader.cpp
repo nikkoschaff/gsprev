@@ -7,14 +7,14 @@ using namespace std;
 // Main lead-in function for grading
 // ALL it does is call the helper function to get the grade,
 //	Then sets the score and answers
-void Grader::grade( int assignmentID, vector< string > key, int keyID,
+void Grader::grade( int assignmentID, std::pair< int, std::vector< std::string > > keyAnswers,
 	vector< pair< int, vector< string > > > studentAnswers ) {
 
 	// Gets the grade, sets the score
 	for( unsigned int i = 0; i < studentAnswers.size(); i++ ) {
 
 	// Get score and convert type to double for db assignment
-	double score = ( Grader::gradeSingleAssignment( key, studentAnswers.at( i ).second ) * 100);
+		double score = ( Grader::gradeSingleAssignment( keyAnswers.second, studentAnswers.at( i ).second ) * 100);
 	string stringScore;
 	stringstream s;
 	s << score;
