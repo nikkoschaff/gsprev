@@ -16,9 +16,9 @@ int main ( int argc, char* argv[] ) {
 	// Gets number of questions on exam
 	int numVerify = 0;
 	int numQuestions = 5;
-	/*
+	char numQChar[ 4 ];
 	while( numVerify == 0 ) {
-		char numQChar[ 4 ];
+
 		cout << "How many questions will there be on this exam? (1-50): ";
 		cin >> numQChar;
 		cout << endl;
@@ -31,11 +31,11 @@ int main ( int argc, char* argv[] ) {
 		}
 	}
 
-	*/
+	
 	// Gets the key file name
 	int fileVerify = 0;
 	string keyFilename = "s2-2.jpeg";
-	/*
+	
 	while ( fileVerify == 0 ) {
 		keyFilename = "";
 		cout << "Please enter the name of the key file (with file extension): ";
@@ -92,12 +92,12 @@ int main ( int argc, char* argv[] ) {
 
 
 	}
-	*/
+	
 
 	// Gets student exam filenames
 	vector< string > studentExamFilenames;
-	studentExamFilenames.push_back( "s2-2.jpeg" );
-	/*
+	//studentExamFilenames.push_back( "s2-2.jpeg" );
+	
 	string testFilename;
 	string end( "end" );
 
@@ -159,7 +159,7 @@ int main ( int argc, char* argv[] ) {
 			}
 		}
 	}
-	*/
+	
 
 
 	//Checks to see if there was no file name entered
@@ -180,7 +180,8 @@ int main ( int argc, char* argv[] ) {
 	
 	// --- TOP LEVEL ----  
 	int classID = 1;
-	int assignmentID = 1;
+
+	int assignmentID = DBManager::makeDataObject( "Assignment", numQChar );
 
 	// Create key, link to assignment, set filename
 	int keyID =	DBManager::makeDataObject( "Student", keyFilename );
@@ -221,7 +222,7 @@ int main ( int argc, char* argv[] ) {
 	GradeSnapModel gsm;
 	gsm.evaluateImage( assignmentID, classID, keyFilePair, studentFilePairs, numQuestions );
 	gsm.printResults( assignmentID, classID, keyID, studentIDs  );
-
+	gsm.getStats( assignmentID, classID, keyID, studentIDs );
 
 	int x;
 	cin >> x;

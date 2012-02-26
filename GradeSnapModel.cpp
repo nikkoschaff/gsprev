@@ -50,14 +50,41 @@ void GradeSnapModel::printResults( int assignmentID, int classID, int keyID,
 		vector< string > r = DBManager::getLinkedValues( "LinkerStudentAssignment",
 			assignmentID, studentIDs.at( i ), "AssignmentID", "StudentID" );
 		grade = DBManager::getDataObjectValue( "LinkerStudentAssignment",
-			atoi( r.at( i ).c_str() ), "grade" );
+			atoi( r.at( 0 ).c_str() ), "grade" );
 				cout << "Student: " << studentIDs.at( i ) << " scored: " <<
 			grade << "%" << endl;
 	}
 
-	cout << endl << "Done grading" << endl;
+	cout << endl << "Done grading" << endl << endl;
 }
 
-void GradeSnapModel::getStats( int assignmentID, int classID ) {
-	// TODO implement
+void GradeSnapModel::getStats( int assignmentID, int classID,
+	int keyID, vector< int > studentIDs) {
+
+	cout << "Printing statistics: " << endl << endl;
+
+	cout << "Mean: " << Statistics::mean( assignmentID, studentIDs ) << "%" << endl << endl;
+
+	cout << "Median: " << Statistics::median( assignmentID, studentIDs ) <<  "%" << endl << endl;
+
+	pair< int, double > mode( Statistics::mode( assignmentID, studentIDs ) );
+	cout << "Mode: " << mode.second  << "% with frequency of: " << mode.first  << endl << endl;
+
+	cout << "Grade Distribution: " << endl;
+	vector< pair< char, double > > dist = Statistics::gradeDistribution( 
+		assignmentID, studentIDs, keyID );
+	for( int i = 0; i < dist.size(); i++ ) {
+		cout << dist.at( i ).first << ": " << dist.at( i ).second << "%" << endl;
+	}
+
+	cout << "Answer accuracy: " << endl << endl;
+	vector< pair< string, double > > accuracy = Statistics::answerAccuracy( 
+		assignmentID, studentIDs, keyID );
+	for( int i = 0; i < accuracy.size(); i++ ) {
+		cout << i + 1 << ": " <<  accuracy.at( i ).first << " - "
+			<< accuracy.at( i ).second << "%" << endl;
+	}
+
+
+	// TODO standard deviation...someday
 }

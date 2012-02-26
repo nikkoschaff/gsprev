@@ -10,6 +10,7 @@
 #include "ImageManager.h"
 #include "Grader.h"
 #include "DBManager.h"
+#include "Statistics.h"
 
 class GradeSnapModel {
 
@@ -28,7 +29,8 @@ public:
 	void printResults( int assignmentID, int classID, int keyID,
 		std::vector< int > studentIDs );
 	
-	void getStats( int assignmentID, int classID );
+	void getStats( int assignmentID, int classID, int keyID,
+		std::vector< int > studentIDs );
 
 
 

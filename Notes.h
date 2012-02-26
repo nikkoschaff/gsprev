@@ -8,12 +8,13 @@ $$$1: TODO reflect changes:
 $$$3: Set standards
 
 I: TODO
-	A: Verify: store answers after directly after grading - good or bad idea?
+	AA1: Finish standard deviation
+	AA2: Test ALL the things!
 
-	B: Problem - Using names as a way to store new stuff in the DB is a bad idea
-		-> Any identical names just throw it all off.  
-		Solution? 
-			-> Make the makeDataObject method return the interger value of new row
+	A: Verify: store answers after directly after grading - good or bad idea?
+		-- may be easier to work with at higher level before saving
+			-- Next change, clean up to reflect change - db work goes in GSM
+	B: Verify - clean up database by getting fullset of data immediately?
 
 II: Database concerns
 	1: What happens if searching out of index or availability? (or at a table that doesn't exist)
