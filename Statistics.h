@@ -9,6 +9,8 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <math.h>
+#include <random>
 
 namespace Statistics {
 
@@ -29,11 +31,10 @@ namespace Statistics {
 	std::vector< std::pair< std::string, double > > answerAccuracy( int assignmentID,
 		std::vector< int > studentIDs, int keyID );
 
-	// TODO normal distribution (don't implement until header is good)
-	// Mention if there IS NO normal distribution
-	std::vector< int > standardDeviation( int assignmentID,
-		std::vector< int > studentIDs ); 
 
+	// Finds standard deviation
+	double standardDeviation( int assignmentID,
+		std::vector< int > studentIDs, double mean = 0.0 ); 
 
 
 	// Helper function to get an array of letters from the answer letters

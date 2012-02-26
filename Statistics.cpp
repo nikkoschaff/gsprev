@@ -191,10 +191,42 @@ std::vector< std::pair< char, double > > Statistics::gradeDistribution( int assi
 }
 
 // TODO normal distribution
-std::vector< int > Statistics::standardDeviation( int assignmentID,
-	std::vector< int > studentIDs ) {
+double Statistics::standardDeviation( int assignmentID,
+	std::vector< int > studentIDs, double mean  ) {
 
-	return vector< int >();
+	vector< int > ids;
+	vector< double > grades;
+	double total = 0;
+
+	// Get the IDs of the rows containing the grades
+	for( int i = 0; i < studentIDs.size(); i++ ) {
+		ids.push_back( atoi( DBManager::getLinkedValues( "LinkerStudentAssignment", assignmentID,
+			studentIDs.at( i ), "AssignmentID", "StudentID" ).at( 0 ).c_str() ) );
+	}
+
+	// Get the grades for the corresponding
+	for( int i = 0; i < ids.size(); i++ ) {
+		grades.push_back( strtod( ( DBManager::getDataObjectValue( "LinkerStudentAssignment",
+			ids.at( i ), "grade" ) ).c_str(), NULL ) );
+		total += grades.at( grades.size() - 1 );
+	}
+	
+	//Get the mean
+	if ( mean == 0.0 ) {
+		mean =  total/ids.size();
+	}
+
+
+	double numerator = 0;
+	double denominator = grades.size();
+
+	for( int i = 0; i < denominator; i++ ) {
+		numerator = numerator + pow( ( grades.at( i ) - mean ), 2 );
+	}
+
+	double standardDeviation = sqrt ( numerator / denominator );
+
+	return standardDeviation;
 }
 
 

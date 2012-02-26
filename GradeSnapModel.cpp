@@ -86,5 +86,7 @@ void GradeSnapModel::getStats( int assignmentID, int classID,
 	}
 
 
-	// TODO standard deviation...someday
+	cout << endl <<  "Standard deviation: ";
+	cout << Statistics::standardDeviation( 
+		assignmentID, studentIDs ) << endl;
 }
