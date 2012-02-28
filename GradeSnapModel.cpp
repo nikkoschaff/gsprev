@@ -73,14 +73,14 @@ void GradeSnapModel::getStats( int assignmentID, int classID,
 	cout << "Grade Distribution: " << endl;
 	vector< pair< char, double > > dist = Statistics::gradeDistribution( 
 		assignmentID, studentIDs, keyID );
-	for( int i = 0; i < dist.size(); i++ ) {
+	for( unsigned int i = 0; i < dist.size(); i++ ) {
 		cout << dist.at( i ).first << ": " << dist.at( i ).second << "%" << endl;
 	}
 
 	cout << "Answer accuracy: " << endl << endl;
 	vector< pair< string, double > > accuracy = Statistics::answerAccuracy( 
 		assignmentID, studentIDs, keyID );
-	for( int i = 0; i < accuracy.size(); i++ ) {
+	for( unsigned int i = 0; i < accuracy.size(); i++ ) {
 		cout << i + 1 << ": " <<  accuracy.at( i ).first << " - "
 			<< accuracy.at( i ).second << "%" << endl;
 	}

@@ -1,7 +1,47 @@
 
 
-#include "GradeSnap.h"
 
+//#include "GradeSnap.h"
+//#include <wx\wx.h>
+/*
+
+class BasicApplication : public wxApp
+{
+public:
+	virtual bool OnInit();
+};
+ 
+class BasicFrame : public wxFrame
+{
+public:
+	BasicFrame( const wxChar *title, int xpos, int ypos, int width, int height );
+	~BasicFrame();
+};
+
+
+IMPLEMENT_APP(BasicApplication)
+ 
+bool BasicApplication::OnInit()
+{
+	BasicFrame *frame = new BasicFrame(_T("Basic"), 50, 50, 450, 300);
+ 
+	frame->Show(TRUE);
+	SetTopWindow(frame);
+	return TRUE;
+}
+ 
+BasicFrame::BasicFrame( const wxChar *title, int xpos, int ypos, int width, int height)
+: wxFrame( (wxFrame*) NULL, -1, title, wxPoint(xpos, ypos), wxSize(width, height) )
+{
+}
+ 
+BasicFrame::~BasicFrame()
+{
+}
+
+
+*/
+/*
 
 #include <iostream>
 using namespace std;
@@ -231,3 +271,4 @@ int main ( int argc, char* argv[] ) {
 
 	return 0;
 }
+*/

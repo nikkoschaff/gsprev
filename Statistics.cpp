@@ -12,13 +12,13 @@ double Statistics::mean( int assignmentID, std::vector< int > studentIDs ) {
 	double total = 0;
 
 	// Get the IDs of the rows containing the grades
-	for( int i = 0; i < studentIDs.size(); i++ ) {
+	for( unsigned int i = 0; i < studentIDs.size(); i++ ) {
 		ids.push_back( atoi( DBManager::getLinkedValues( "LinkerStudentAssignment", assignmentID,
 			studentIDs.at( i ), "AssignmentID", "StudentID" ).at( 0 ).c_str() ) );
 	}
 
 	// Get the grades for the corresponding
-	for( int i = 0; i < ids.size(); i++ ) {
+	for( unsigned int i = 0; i < ids.size(); i++ ) {
 		total += strtod( ( DBManager::getDataObjectValue( "LinkerStudentAssignment",
 			ids.at( i ), "grade" ) ).c_str(), NULL );
 	}
@@ -34,13 +34,13 @@ double Statistics::median( int assignmentID, std::vector< int > studentIDs  ) {
 	vector< double > results;
 
 	// Get the IDs of the rows containing the grades
-	for( int i = 0; i < studentIDs.size(); i++ ) {
+	for( unsigned int i = 0; i < studentIDs.size(); i++ ) {
 		ids.push_back( atoi( DBManager::getLinkedValues( "LinkerStudentAssignment", assignmentID,
 			studentIDs.at( i ), "AssignmentID", "StudentID" ).at( 0 ).c_str() ) );
 	}
 
 	// Get the grades for the corresponding
-	for( int i = 0; i < ids.size(); i++ ) {
+	for( unsigned int i = 0; i < ids.size(); i++ ) {
 		results.push_back( strtod( ( DBManager::getDataObjectValue( "LinkerStudentAssignment",
 			ids.at( i ), "grade" ) ).c_str(), NULL ) );
 	}
@@ -57,23 +57,23 @@ pair< int, double > Statistics::mode( int assignmentID, std::vector< int > stude
 	vector< double > results;
 
 	// Get the IDs of the rows containing the grades
-	for( int i = 0; i < studentIDs.size(); i++ ) {
+	for( unsigned int i = 0; i < studentIDs.size(); i++ ) {
 		ids.push_back( atoi( DBManager::getLinkedValues( "LinkerStudentAssignment", assignmentID,
 			studentIDs.at( i ), "AssignmentID", "StudentID" ).at( 0 ).c_str() ) );
 	}
 
 	// Get the grades for the corresponding
-	for( int i = 0; i < ids.size(); i++ ) {
+	for( unsigned int i = 0; i < ids.size(); i++ ) {
 		results.push_back( strtod( ( DBManager::getDataObjectValue( "LinkerStudentAssignment",
 			ids.at( i ), "grade" ) ).c_str(), NULL ) );
 	}
 
 	sort( results.begin(), results.end() );
 	double num = 0;
-	double count = 0;
+	int count = 0;
 	int max = 0;
 	double mode = 0;
-	for( int i = 0; i < results.size(); i++ ) {
+	for( unsigned int i = 0; i < results.size(); i++ ) {
 
 		if ( num != results.at( i ) ) {
 			num = results.at( i );
@@ -100,7 +100,7 @@ std::vector< std::pair< std::string, double > > Statistics::answerAccuracy( int 
 	vector< pair< string, double > > results;
 
 	// Get the IDs of the rows containing the grades
-	for( int i = 0; i < studentIDs.size(); i++ ) {
+	for( unsigned int i = 0; i < studentIDs.size(); i++ ) {
 		ids.push_back( atoi( DBManager::getLinkedValues( "LinkerStudentAssignment", assignmentID,
 			studentIDs.at( i ), "AssignmentID", "StudentID" ).at( 0 ).c_str() ) );
 	}
@@ -113,7 +113,7 @@ std::vector< std::pair< std::string, double > > Statistics::answerAccuracy( int 
 
 	// Set up key vector and use to set up results
 	vector< string > keyVect = Statistics::getLettersVector( keyAnswers );
-	for( int i = 0; i < keyVect.size(); i++ ) {
+	for( unsigned int i = 0; i < keyVect.size(); i++ ) {
 		results.push_back( pair< string, double >( keyVect.at( i ), 0 ) );
 	}
 	
@@ -122,7 +122,7 @@ std::vector< std::pair< std::string, double > > Statistics::answerAccuracy( int 
 
 	// Get the answers from the studentID and add 1 to results for every correct one
 	vector< string > answersVect;
-	for( int sIndex = 0; sIndex < ids.size(); sIndex++ ) {
+	for( unsigned int sIndex = 0; sIndex < ids.size(); sIndex++ ) {
 		
 		// String of student answers
 		string studentAnswers = DBManager::getDataObjectValue( "LinkerStudentAssignment",
@@ -131,7 +131,7 @@ std::vector< std::pair< std::string, double > > Statistics::answerAccuracy( int 
 		answersVect = Statistics::getLettersVector( studentAnswers );
 
 		// Through every answer - grade here and add 1 to results if good
-		for( int i = 0; i < keyVect.size(); i++ ) {
+		for( unsigned int i = 0; i < keyVect.size(); i++ ) {
 			if ( i < answersVect.size() && 
 				( answersVect.at( i ).compare( keyVect.at( i ) ) == 0 ) ) {
 				results.at( i ).second = results.at( i ).second + 1;
@@ -141,7 +141,7 @@ std::vector< std::pair< std::string, double > > Statistics::answerAccuracy( int 
 	}
 
 	// Goes through results and derives the average for each answer from given total
-	for( int i = 0; i < results.size(); i++ ) {
+	for( unsigned int i = 0; i < results.size(); i++ ) {
 		results.at( i ).second = ( results.at( i ).second / ids.size() ) * 100;
 	}
 	return results;
@@ -152,7 +152,7 @@ std::vector< std::pair< char, double > > Statistics::gradeDistribution( int assi
 	std::vector< int > studentIDs, int keyID ) {
 
 	vector< pair< char, double > > dist;
-	for( int i = 0; i < 5; i++ ) {
+	for( unsigned int i = 0; i < 5; i++ ) {
 		dist.push_back( pair< char, double >( 'a', 0 ) );
 	}
 	dist.at( 0 ).first = 'A';
@@ -162,7 +162,7 @@ std::vector< std::pair< char, double > > Statistics::gradeDistribution( int assi
 	dist.at( 4 ).first = 'F';
 
 	// Get the IDs of the rows containing the grades and set them
-	for( int i = 0; i < studentIDs.size(); i++ ) {
+	for( unsigned int i = 0; i < studentIDs.size(); i++ ) {
 		int sID = ( atoi( DBManager::getLinkedValues( "LinkerStudentAssignment", assignmentID,
 			studentIDs.at( i ), "AssignmentID", "StudentID" ).at( 0 ).c_str() ) );
 
@@ -183,7 +183,7 @@ std::vector< std::pair< char, double > > Statistics::gradeDistribution( int assi
 	}
 
 	// Goes through results and derives the average for each answer from given total
-	for( int i = 0; i < dist.size(); i++ ) {
+	for( unsigned int i = 0; i < dist.size(); i++ ) {
 		dist.at( i ).second = ( dist.at( i ).second / studentIDs.size() ) * 100;
 	}
 
@@ -199,13 +199,13 @@ double Statistics::standardDeviation( int assignmentID,
 	double total = 0;
 
 	// Get the IDs of the rows containing the grades
-	for( int i = 0; i < studentIDs.size(); i++ ) {
+	for( unsigned int i = 0; i < studentIDs.size(); i++ ) {
 		ids.push_back( atoi( DBManager::getLinkedValues( "LinkerStudentAssignment", assignmentID,
 			studentIDs.at( i ), "AssignmentID", "StudentID" ).at( 0 ).c_str() ) );
 	}
 
 	// Get the grades for the corresponding
-	for( int i = 0; i < ids.size(); i++ ) {
+	for( unsigned int i = 0; i < ids.size(); i++ ) {
 		grades.push_back( strtod( ( DBManager::getDataObjectValue( "LinkerStudentAssignment",
 			ids.at( i ), "grade" ) ).c_str(), NULL ) );
 		total += grades.at( grades.size() - 1 );
@@ -220,7 +220,7 @@ double Statistics::standardDeviation( int assignmentID,
 	double numerator = 0;
 	double denominator = grades.size();
 
-	for( int i = 0; i < denominator; i++ ) {
+	for( unsigned int i = 0; i < denominator; i++ ) {
 		numerator = numerator + pow( ( grades.at( i ) - mean ), 2 );
 	}
 
@@ -235,7 +235,7 @@ vector< string > Statistics::getLettersVector( string answers ) {
 	string at = "";
 
 
-	for( int i = 0; i < answers.size(); i++ ) {
+	for( unsigned int i = 0; i < answers.size(); i++ ) {
 		at = answers.at( i );
 
 		if( at.compare( "," ) == 0 ) {
