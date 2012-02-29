@@ -10,19 +10,6 @@
 #include "ImageEvaluator.h"
 #include "ImageReadException.h"
 
-/*
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-*/
-
-#include "opencv2\opencv.hpp"
-
-
-//System header includes - Used now for testing
-#include < iostream >
-
-
 using namespace std;
 using namespace cv;
 

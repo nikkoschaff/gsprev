@@ -9,15 +9,16 @@
 #define IMAGEEVALUATOR_H_
 
 //Local header includes
-#include "highgui.h"
 
 //System header includes
-#include "opencv2\opencv.hpp"
+#include <opencv2\core\core.hpp>
+#include <opencv2\imgproc\imgproc.hpp>
+#include <opencv2\highgui\highgui.hpp>
 #include < vector >
 #include < cassert >
 #include < math.h >
 #include < string >
-
+#include < iostream >
 
 
 class ImageEvaluator {

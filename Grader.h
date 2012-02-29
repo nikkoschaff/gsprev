@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include <iostream>
 #include "DBManager.h"
 
 // Takes information to compare and grade.  The functions to grade are only

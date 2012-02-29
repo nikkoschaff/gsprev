@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <math.h>
 #include <random>
+#include <iostream>
 
 namespace Statistics {
 

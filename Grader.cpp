@@ -1,6 +1,5 @@
 
 #include "Grader.h"
-#include <iostream>
 
 using namespace std;
 
