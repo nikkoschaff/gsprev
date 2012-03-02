@@ -51,6 +51,10 @@ class MainFrame : public wxFrame
 		// Switches to stats panel and has it compute stats
 		virtual void onStatsButtonClick( wxCommandEvent& event );
 
+		// Done from stats - goes to home screen
+		virtual void onDoneButtonClick( wxCommandEvent& event );
+
+
 };
 
 #endif // MainFrame.h

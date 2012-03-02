@@ -33,22 +33,26 @@ class gui_panel_stats : public wxPanel
 	private:
 	
 	protected:
-		wxScrolledWindow* m_scrolledWindow1;
-		wxStaticBitmap* m_bitmap7;
-		wxButton* button_done;
+		wxScrolledWindow* stats_scrolled_window;
+		wxStaticBitmap* gs_icon;
+
 		wxStaticText* m_staticText12;
-		wxTextCtrl* m_textCtrl7;
 		wxStaticText* m_staticText13;
-		wxTextCtrl* m_textCtrl8;
 		wxStaticText* m_staticText14;
-		wxTextCtrl* m_textCtrl9;
+		wxTextCtrl* mean_output;
+		wxTextCtrl* median_output;
+		wxTextCtrl* mode_output;
 		wxStaticText* m_staticText15;
-		wxTextCtrl* m_textCtrl10;
-		wxStaticText* m_staticText16;
+		wxStaticText* m_staticText161;
+		wxStaticText* Frequency;
+		wxStaticText* m_staticText1611;
+		wxStaticText* m_staticText1612;
+		wxTextCtrl* frequency_output;
+		wxStaticText* staticText_chart;
 		wxStaticBitmap* m_bitmap6;
-		wxStaticText* m_staticText17;
+		wxStaticText* staticText_accuracy;
 		wxStaticBitmap* m_bitmap8;
-		wxStaticText* m_staticText18;
+		wxStaticText* staticText_normaldist;
 		wxStaticBitmap* m_bitmap9;
 		
 		// Virtual event handlers, overide them in your derived class
@@ -59,8 +63,10 @@ class gui_panel_stats : public wxPanel
 		
 		gui_panel_stats( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 800,600 ), long style = wxTAB_TRAVERSAL ); 
 		~gui_panel_stats();
-	
+		
+		wxButton* button_done;
 };
+
 
 
 #endif

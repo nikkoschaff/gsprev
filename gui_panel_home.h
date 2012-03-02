@@ -18,30 +18,27 @@
 #include <wx/sizer.h>
 #include <wx/panel.h>
 #include <wx/imagjpeg.h>
+#include <cassert>
 
 ///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class gui_panel_home
 ///////////////////////////////////////////////////////////////////////////////
-
 class gui_panel_home : public wxPanel 
 {
 	private:
-	
+
+
 	protected:
 		wxStaticBitmap* m_bitmap2;
-		wxButton* Quick_Grade;
-		wxButton* m_button6;
-		wxButton* m_button7;
-		wxButton* m_button8;
+
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void onQuickGradeClick( wxCommandEvent& event );
-		virtual void onAssignmentsButtonClick( wxCommandEvent& event );
-		virtual void onStudentsButtonClick( wxCommandEvent& event );
-		virtual void onQuestBankButtonClick( wxCommandEvent& event );
-
+		virtual void onQuickGradeClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onAssignmentsButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onStudentsButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onQuestBankButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
@@ -49,6 +46,12 @@ class gui_panel_home : public wxPanel
 		gui_panel_home( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 800,600 ), long style = wxTAB_TRAVERSAL ); 
 		~gui_panel_home();
 	
+		wxButton* button_quickgrade;
+		wxButton* button_assignments;
+		wxButton* button_students;
+		wxButton* buttons_questbank;	
+
+
 };
 
 

@@ -43,8 +43,8 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 		NULL, this );
 	viewer->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MainFrame::onStatsButtonClick ),
 		NULL, this );
-
-	// TODO add "done" from stats
+	stats->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MainFrame::onDoneButtonClick ),
+		NULL, this );
 }
 
 MainFrame::~MainFrame()
@@ -53,28 +53,46 @@ MainFrame::~MainFrame()
 
 void MainFrame::onQuickGradeClick( wxCommandEvent& event ) {
 
-	home->Hide();
-	grade->Show();
-	this->Update();
-	this->Refresh();
-
+	if ( event.GetId() == home->button_quickgrade->GetId() ) {
+		home->Hide();
+		grade->Show();
+		this->Update();
+		this->Refresh();
+	}
 }
 
 void MainFrame::onGradeButtonClick( wxCommandEvent& event ) {
 
-	// Switch panels
-	grade->Hide();
-	viewer->Show();
-	this->Refresh();
-	this->Update();
+	if( event.GetId() == grade->panel_grade_gradebutton->GetId() ) {
+
+		// Switch panels
+		grade->Hide();
+		viewer->Show();
+		this->Refresh();
+		this->Update();
+	}
 }
 
 
 void MainFrame::onStatsButtonClick( wxCommandEvent& event ) {
 
-	// Switch to stats panel
-	viewer->Hide();
-	stats->Show();
-	this->Refresh();
-	// Has stats panel compute stats
+
+	if( event.GetId() == viewer->button_stats->GetId() ) {
+		// Switch to stats panel
+		viewer->Hide();
+		stats->Show();
+		this->Refresh();
+		// Has stats panel compute stats
+	}
+}
+
+void MainFrame::onDoneButtonClick( wxCommandEvent& event ) {
+
+	if( event.GetId() == stats->button_done->GetId() ) {
+
+		stats->Hide();
+		home->Show();
+		this->Refresh();
+	}
+
 }

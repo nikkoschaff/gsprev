@@ -34,13 +34,14 @@ class gui_panel_viewer : public wxPanel
 {
 	private:
 	
+
 	protected:
-		wxStaticBitmap* m_bitmap4;
+		wxStaticBitmap* gs_icon;
 		wxStaticText* m_staticText3;
-		wxListBox* m_listBox1;
+		wxListBox* panel_viewer_listbox;
 		wxStaticText* m_staticText2;
-		wxButton* m_button9;
 		wxStaticBitmap* img_test;
+
 		wxStaticText* label_students_names;
 		wxTextCtrl* name_input;
 		wxStaticText* label_grade;
@@ -55,10 +56,12 @@ class gui_panel_viewer : public wxPanel
 		
 	
 	public:
+
 		
 		gui_panel_viewer( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 800,600 ), long style = wxTAB_TRAVERSAL ); 
 		~gui_panel_viewer();
-	
-};
 
+
+		wxButton* button_stats;
+};
 #endif
