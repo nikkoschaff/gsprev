@@ -34,8 +34,9 @@ ImageEvaluator::ImageEvaluator( int numQ )
 	
 	baseImage = imread( "GSTMain.jpg", 0 );
 	if ( baseImage.data == NULL ) {
-		cerr << "Read error for main file. " <<
-			" Check to see if GSTMain.jpg is in the program directory" << endl;
+//		cerr << "Read error for main file. " <<
+//			" Check to see if GSTMain.jpg is in the program directory" << endl;
+//		exit( 0 );
 	}
 }
 
@@ -116,11 +117,10 @@ void ImageEvaluator::setImage( string eFilename ) {
 			throw ImageReadException;
 		}
 	} catch ( exception & e ) {
-		cout << e.what() << endl;
-		int stop = 1;
-		cout << "Program will now end. Press any key and enter to terminate." << endl;
-		cin >> stop;
-		exit( 0 );
+//		cout << e.what() << endl;
+//		int stop = 1;
+//		cout << "Program will now end. Press any key and enter to terminate." << endl;
+//		exit( 0 );
 	}
 
 	//Sets the resolution ratios
@@ -407,11 +407,11 @@ void ImageEvaluator::cv_compCalibCorners() {
 			throw ImageReadException;
 		}
 	} catch ( exception & e ) {
-		cout << e.what() << endl;
-		int stop = 1;
-		cout << "Program will now end. Press any key and enter to terminate." << endl;
-		cin >> stop;
-		exit( 0 );
+//		cout << e.what() << endl;
+//		int stop = 1;
+//		cout << "Program will now end. Press any key and enter to terminate." << endl;
+//		cin >> stop;
+//		exit( 0 );
 	}
 	
 	// ---- Handling to fix problem of sideways-oriented image file ---- 

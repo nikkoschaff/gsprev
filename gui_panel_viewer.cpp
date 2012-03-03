@@ -2,6 +2,7 @@
 
 #include "gui_panel_viewer.h"
 
+using namespace std;
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -127,6 +128,39 @@ gui_panel_viewer::~gui_panel_viewer()
 	
 }
 
+void gui_panel_viewer::initList() {
+
+
+	// set panel_viewer_listbox to fill with studentIDs, with FIRST being keyID
+	std::string studentname;
+	int keyrow = atoi( DBManager::getLinkedValues( "LinkerStudentAssignment", gsm.getkeyid(),
+		gsm.getassignmentid(), "StudentID", "AssignmentID" ).at( 0 ).c_str() );
+	std::string keyfilename = DBManager::getDataObjectValue( "LinkerStudentAssignment", keyrow, "filename" );
+	// TODO fix issue where gsm's ids bizarrely link with the image read error from ieval
+	std::string keyname = keyfilename + " (KEY) ";
+	wxString wxkey( keyname );
+	panel_viewer_listbox->Append( wxkey );
+
+	assignmentslist.push_back( pair<int, string>( gsm.getkeyid(), keyname ) );
+
+	for( unsigned int i = 0; i < gsm.getstudentids().size(); i++ ) {
+		// Gets Id from the model, sets it to matching index position in the listbox
+		int studentrow = atoi( DBManager::getLinkedValues( "LinkerStudentAssignment", gsm.getstudentids().at( i ),
+			gsm.getassignmentid(), "StudentID", "AssignmentID" ).at( 0 ).c_str() );
+		std::string filename = DBManager::getDataObjectValue( "LinkerStudentAssignment", studentrow, "filename" );
+
+		assignmentslist.push_back( pair< int, string >( gsm.getstudentids().at( i ), DBManager::getDataObjectValue(
+			"Student", gsm.getstudentids().at( i ), "name" ) ) );
+
+		studentname = filename;
+		wxString sname( studentname );
+		panel_viewer_listbox->Append( sname );
+
+	}
+
+
+}
+
 // refresh - currently-selected= display (w/info), populate sidebar list
 void gui_panel_viewer::refreshInfo() {
 
@@ -135,39 +169,20 @@ void gui_panel_viewer::refreshInfo() {
 		gsm.getassignmentid(), "StudentID", "AssignmentID" ).at( 0 ).c_str() );
 
 	// TODO set image based on selstudentID
-	wxString curstudenttest = wxString::FromAscii( DBManager::getDataObjectValue( 
-		"LinkerStudentAssignment", curstudentrow, "filename").c_str() );
+	std::string teststr = DBManager::getDataObjectValue( 
+		"LinkerStudentAssignment", curstudentrow, "filename");
+	wxString curstudenttest( teststr );
 
 
 	// set sel name
-	wxString curstudentname = wxString::FromAscii( DBManager::getDataObjectValue(
-		"LinkerStudentAssignment", curstudentrow, "name" ).c_str() );
-	name_input->SetLabelText( curstudentname );
+	wxString curstudentname( DBManager::getDataObjectValue(
+		"Student", gsm.getselcurstudentid(), "name" ) );
+	name_input->SetValue( curstudentname );
 
 	// set sel grade
-
-	wxString curstudentgrade = wxString::FromAscii( DBManager::getDataObjectValue( 
-		"LinkerStudentAssignment", curstudentrow, "grade" ).c_str() );
-	grade_output->SetLabelText( curstudentgrade );
-
-
-	// set panel_viewer_listbox to fill with studentIDs, with FIRST being keyID
-	std::string studentname;
-	int keyrow = atoi( DBManager::getLinkedValues( "LinkerStudentAssignment", gsm.getkeyid(),
-		gsm.getassignmentid(), "StudentID", "AssignmentID" ).at( 0 ).c_str() );
-	std::string keyfilename = DBManager::getDataObjectValue( "LinkerStudentAssignment", keyrow, "filename" );
-	std::string keyname = gsm.getkeyid() + "-" + keyfilename;
-	panel_viewer_listbox->SetString( 0, wxString::FromAscii( keyname.c_str() ) );
-	for( unsigned int i = 1; i <gsm.getstudentids().size(); i++ ) {
-		// Gets Id from the model, sets it to matching index position in the listbox
-		int studentrow = atoi( DBManager::getLinkedValues( "LinkerStudentAssignment", gsm.getstudentids().at( i ),
-			gsm.getassignmentid(), "StudentID", "AssignmentID" ).at( 0 ).c_str() );
-		std::string filename = DBManager::getDataObjectValue( "LinkerStudentAssignment", studentrow, "filename" );
-
-		studentname = gsm.getstudentids().at( i ) + "-" + filename;
-		panel_viewer_listbox->SetString( i, wxString::FromAscii( studentname.c_str() ) );
-
-	}
+	wxString curstudentgrade( DBManager::getDataObjectValue( 
+		"LinkerStudentAssignment", curstudentrow, "grade" ) );
+	grade_output->SetValue( curstudentgrade );
 
 }
 
@@ -175,22 +190,13 @@ void gui_panel_viewer::refreshInfo() {
 void gui_panel_viewer::onListElementClicked( wxCommandEvent& event ) {
 
 
+	// Sets the new currently-selected student to the ID of the student of the 
+	//	assignment selected
 	int sel = panel_viewer_listbox->GetSelection();
-	std::string selidstr = panel_viewer_listbox->GetString( sel );
-
-	std::string idstr;
-	// Get only the id portions
-	int stridx = 0;
-	while ( selidstr.at( stridx ) != '-' ) {
-		// TODO make sure the comparison operator works
-		idstr = idstr + selidstr.at( stridx );
-		stridx++;
-	}
-
-	int id = atoi( idstr.c_str() );
-
+	int id = assignmentslist.at( sel ).first;
 	gsm.setcurstudentid( id );
 
+	// Refreshes to show the selected student being shown
 	refreshInfo();
 }
 

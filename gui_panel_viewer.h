@@ -38,6 +38,8 @@ class gui_panel_viewer : public wxPanel
 	private:
 		GradeSnapModel gsm;
 
+		std::vector< std::pair< int, std::string > > assignmentslist;
+
 	protected:
 		wxStaticBitmap* gs_icon;
 		wxStaticText* m_staticText3;
@@ -64,6 +66,9 @@ class gui_panel_viewer : public wxPanel
 
 		// Refreshes the list for display with correct currently-selected
 		void refreshInfo();
+
+		// Sets up the list
+		void initList();
 		
 		gui_panel_viewer( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 800,600 ), long style = wxTAB_TRAVERSAL ); 
 		~gui_panel_viewer();

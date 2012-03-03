@@ -136,6 +136,9 @@ void gui_panel_grade::OnBrowseClick( wxCommandEvent& event ) {
 // finalize data and grade, then progress to next window
 void gui_panel_grade::onGradeButtonClick( wxCommandEvent& event ) {
 
+	// TODO make warning dialog if no test was selected
+
+
 	int classID = 1;
 	int keyID;
 	int assignmentID;
@@ -202,6 +205,7 @@ void gui_panel_grade::onGradeButtonClick( wxCommandEvent& event ) {
 	gsm.setkeyid( keyID );
 	gsm.setassignmentid( assignmentID );
 	gsm.setstudentids( studentIDs );
-
+	gsm.setcurstudentid( gsm.getkeyid() );
+	
 	event.Skip();
 }

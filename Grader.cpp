@@ -42,7 +42,9 @@ void Grader::grade( int assignmentID, std::pair< int, std::vector< std::string >
 	// Store the key results for reference
 	DBManager::setDataObjectValue( "LinkerStudentAssignment", keyAnswers.first,
 		"answers", s );
-
+	// Store the key as "N/A" for grade, when looking up later
+	DBManager::setDataObjectValue( "LinkerStudentAssignment", keyAnswers.first,
+		"grade", "N/A" );
 }
 
 // Helper to grade a single assignment

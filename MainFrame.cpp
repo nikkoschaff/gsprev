@@ -67,6 +67,7 @@ void MainFrame::onGradeButtonClick( wxCommandEvent& event ) {
 
 		// Switch panels
 		grade->Hide();
+		viewer->initList();
 		viewer->refreshInfo();
 		viewer->Show();
 		this->Refresh();
