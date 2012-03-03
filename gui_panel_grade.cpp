@@ -74,7 +74,7 @@ gui_panel_grade::gui_panel_grade( wxWindow* parent, wxWindowID id, const wxPoint
 	bSizer10->Add( bSizer13, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	wxArrayString panel_grade_listboxChoices;
-	panel_grade_listbox = new wxCheckListBox( this, wxID_ANY, wxDefaultPosition, wxSize( 450,250 ), panel_grade_listboxChoices, wxLB_ALWAYS_SB|wxLB_HSCROLL|wxLB_SINGLE|wxLB_SORT );
+	panel_grade_listbox = new wxCheckListBox( this, wxID_ANY, wxDefaultPosition, wxSize( 450,250 ), panel_grade_listboxChoices, wxLB_ALWAYS_SB|wxLB_HSCROLL|wxLB_SINGLE );
 	panel_grade_listbox->SetFont( wxFont( 15, 74, 90, 90, false, wxT("MS Shell Dlg 2") ) );
 	
 	bSizer10->Add( panel_grade_listbox, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
@@ -121,20 +121,15 @@ gui_panel_grade::~gui_panel_grade()
 	browse->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( gui_panel_grade::OnBrowseClick ), NULL, this );
 }
 
-// TODO finish - SET INFO FOUND TO BE IN PANEL_GRADE_LISTBOX
+
 void gui_panel_grade::OnBrowseClick( wxCommandEvent& event ) {
 	wxFileDialog *picker = new wxFileDialog( this, wxT("Select a file"), wxEmptyString, wxEmptyString, wxT("*.*"), wxFLP_OPEN|wxFD_MULTIPLE );
 
 	if( picker->ShowModal() == wxID_OK ) {
 		wxArrayString fnames;
 		picker->GetFilenames( fnames );
-		// TODO fix - issue with "Sorted"
-		// TODO fix - multiple boxes selectable
 		panel_grade_listbox->InsertItems( fnames, panel_grade_listbox->GetCount() );
-
 	}
-
-	
 }
 
 
@@ -144,11 +139,13 @@ void gui_panel_grade::onGradeButtonClick( wxCommandEvent& event ) {
 	int classID = 1;
 	int keyID;
 	int assignmentID;
-	int numQuestions = atoi( num_quest_input->GetLabelText().c_str() ) ;
+	string numQuestions = num_quest_input->GetValue().ToStdString();
 	std::vector< std::pair< int, std::string > > studentFilePairs;
 	string keyFilename = panel_grade_listbox->GetString( panel_grade_listbox->GetSelection() ).ToStdString();
 
-	assignmentID = DBManager::makeDataObject( "Assignment", name_input->GetLabelText().ToStdString() );
+	// get assignment name and numQ into test
+	assignmentID = DBManager::makeDataObject( "Assignment", name_input->GetValue().ToStdString() );
+	DBManager::setDataObjectValue( "Assignment", assignmentID, "numQuestions", numQuestions );
 
 	// Create key, link to assignment, set filename
 	keyID =	DBManager::makeDataObject( "Student", keyFilename );
@@ -168,10 +165,13 @@ void gui_panel_grade::onGradeButtonClick( wxCommandEvent& event ) {
 
 	vector< string > studentExamFilenames;
 
+	int selidx = panel_grade_listbox->GetSelection();
+
 	// Gets filenames from the listbox and places into exam filename vector
-	for( int i = 0; i < panel_grade_listbox->GetSize().y; i++ ) {
-		// TODO fix - doesn't accept the information properly from the listbox
-		studentExamFilenames.push_back( panel_grade_listbox->GetString( i ).ToStdString() );
+	for( int i = 0; i < panel_grade_listbox->GetCount(); i++ ) {
+		if( i != selidx ) {
+			studentExamFilenames.push_back( panel_grade_listbox->GetString( i ).ToStdString() );
+		}
 	}
 
 
@@ -195,7 +195,7 @@ void gui_panel_grade::onGradeButtonClick( wxCommandEvent& event ) {
 
 	// Grade via gsm
 	GradeSnapModel gsm;
-	gsm.evaluateImage( assignmentID, classID, keyFilePair, studentFilePairs, numQuestions );
+	gsm.evaluateImage( assignmentID, classID, keyFilePair, studentFilePairs, atoi( numQuestions.c_str() ) );
 
 
 	// Save values in gsm
