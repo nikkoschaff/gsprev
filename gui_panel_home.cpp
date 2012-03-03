@@ -11,8 +11,8 @@ gui_panel_home::gui_panel_home( wxWindow* parent, wxWindowID id, const wxPoint& 
 	wxBoxSizer* bSizer2;
 	bSizer2 = new wxBoxSizer( wxVERTICAL );
 	
-	m_bitmap2 = new wxStaticBitmap( this, wxID_ANY, wxBitmap( wxT("../../Tussuad_Be/workspace/Projects/gs_gui/gs_icon.png"), wxBITMAP_TYPE_ANY ), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer2->Add( m_bitmap2, 0, wxALL, 5 );
+//	m_bitmap2 = new wxStaticBitmap( this, wxID_ANY, wxBitmap( wxT("Visual Studio 2010/Projects/GradeSnapMain/GradeSnapMain/gs_icon.png"), wxBITMAP_TYPE_ANY ), wxDefaultPosition, wxDefaultSize, 0 );
+//	bSizer2->Add( m_bitmap2, 0, wxALL, 5 );
 	
 	button_quickgrade = new wxButton( this, wxID_ANY, wxT("Quick Grade"), wxDefaultPosition, wxSize( 250,80 ), 0 );
 	bSizer2->Add( button_quickgrade, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );

@@ -14,8 +14,8 @@ gui_panel_grade::gui_panel_grade( wxWindow* parent, wxWindowID id, const wxPoint
 	wxBoxSizer* bSizer10;
 	bSizer10 = new wxBoxSizer( wxVERTICAL );
 	
-	m_bitmap5 = new wxStaticBitmap( this, wxID_ANY, wxBitmap( wxT("../../Tussuad_Be/workspace/Projects/gs_gui/gs_icon.png"), wxBITMAP_TYPE_ANY ), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer10->Add( m_bitmap5, 0, wxALL, 5 );
+	//m_bitmap5 = new wxStaticBitmap( this, wxID_ANY, wxBitmap( wxT("Visual Studio 2010/Projects/GradeSnapMain/GradeSnapMain/gs_icon.png"), wxBITMAP_TYPE_ANY ), wxDefaultPosition, wxDefaultSize, 0 );
+	//bSizer10->Add( m_bitmap5, 0, wxALL, 5 );
 	
 	wxBoxSizer* bSizer14;
 	bSizer14 = new wxBoxSizer( wxHORIZONTAL );
@@ -137,7 +137,9 @@ void gui_panel_grade::OnBrowseClick( wxCommandEvent& event ) {
 void gui_panel_grade::onGradeButtonClick( wxCommandEvent& event ) {
 
 	// TODO make warning dialog if no test was selected
-
+	if( panel_grade_listbox->GetSelection() == wxNOT_FOUND ) {
+		wxDialog( this, wxID_ANY, wxT( "Warning! - No test selected!" ) );
+	}
 
 	int classID = 1;
 	int keyID;
@@ -171,7 +173,7 @@ void gui_panel_grade::onGradeButtonClick( wxCommandEvent& event ) {
 	int selidx = panel_grade_listbox->GetSelection();
 
 	// Gets filenames from the listbox and places into exam filename vector
-	for( int i = 0; i < panel_grade_listbox->GetCount(); i++ ) {
+	for( unsigned int i = 0; i < panel_grade_listbox->GetCount(); i++ ) {
 		if( i != selidx ) {
 			studentExamFilenames.push_back( panel_grade_listbox->GetString( i ).ToStdString() );
 		}

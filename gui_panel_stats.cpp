@@ -18,8 +18,8 @@ gui_panel_stats::gui_panel_stats( wxWindow* parent, wxWindowID id, const wxPoint
 	wxBoxSizer* sizer_header;
 	sizer_header = new wxBoxSizer( wxHORIZONTAL );
 	
-	gs_icon = new wxStaticBitmap( stats_scrolled_window, wxID_ANY, wxBitmap( wxT("../../Tussuad_Be/workspace/Projects/gs_gui/gs_icon.png"), wxBITMAP_TYPE_ANY ), wxDefaultPosition, wxDefaultSize, 0 );
-	sizer_header->Add( gs_icon, 0, wxALL, 5 );
+//	gs_icon = new wxStaticBitmap( stats_scrolled_window, wxID_ANY, wxBitmap( wxT("Visual Studio 2010/Projects/GradeSnapMain/GradeSnapMain/gs_icon.png"), wxBITMAP_TYPE_ANY ), wxDefaultPosition, wxDefaultSize, 0 );
+//	sizer_header->Add( gs_icon, 0, wxALL, 5 );
 	
 	
 	sizer_header->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -137,8 +137,8 @@ gui_panel_stats::gui_panel_stats( wxWindow* parent, wxWindowID id, const wxPoint
 	
 	sizer_pie_holder->Add( staticText_chart, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
-	m_bitmap6 = new wxStaticBitmap( stats_scrolled_window, wxID_ANY, wxBitmap( wxT("gs_pie2.png"), wxBITMAP_TYPE_ANY ), wxDefaultPosition, wxDefaultSize, 0 );
-	sizer_pie_holder->Add( m_bitmap6, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+//	m_bitmap6 = new wxStaticBitmap( stats_scrolled_window, wxID_ANY, wxBitmap( wxT("Visual Studio 2010/Projects/GradeSnapMain/GradeSnapMain/gs_pie2.png"), wxBITMAP_TYPE_ANY ), wxDefaultPosition, wxDefaultSize, 0 );
+//	sizer_pie_holder->Add( m_bitmap6, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	
 	gui_panel_stats_sizer_main->Add( sizer_pie_holder, 1, wxEXPAND, 5 );
@@ -152,8 +152,8 @@ gui_panel_stats::gui_panel_stats( wxWindow* parent, wxWindowID id, const wxPoint
 	
 	sizer_accuracy_holder->Add( staticText_accuracy, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
-	m_bitmap8 = new wxStaticBitmap( stats_scrolled_window, wxID_ANY, wxBitmap( wxT("../../Tussuad_Be/workspace/Projects/gs_gui/gs_accuracy.png"), wxBITMAP_TYPE_ANY ), wxDefaultPosition, wxDefaultSize, 0 );
-	sizer_accuracy_holder->Add( m_bitmap8, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+//	m_bitmap8 = new wxStaticBitmap( stats_scrolled_window, wxID_ANY, wxBitmap( wxT("Visual Studio 2010/Projects/GradeSnapMain/GradeSnapMain/gs_accuracy.png"), wxBITMAP_TYPE_ANY ), wxDefaultPosition, wxDefaultSize, 0 );
+//	sizer_accuracy_holder->Add( m_bitmap8, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	
 	gui_panel_stats_sizer_main->Add( sizer_accuracy_holder, 0, wxEXPAND, 5 );
@@ -167,8 +167,8 @@ gui_panel_stats::gui_panel_stats( wxWindow* parent, wxWindowID id, const wxPoint
 	
 	sizer_norm_dist_holder->Add( staticText_normaldist, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
-	m_bitmap9 = new wxStaticBitmap( stats_scrolled_window, wxID_ANY, wxBitmap( wxT("../../Tussuad_Be/workspace/Projects/gs_gui/gs_distr.gif"), wxBITMAP_TYPE_ANY ), wxDefaultPosition, wxDefaultSize, 0 );
-	sizer_norm_dist_holder->Add( m_bitmap9, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+//	m_bitmap9 = new wxStaticBitmap( stats_scrolled_window, wxID_ANY, wxBitmap( wxT("Visual Studio 2010/Projects/GradeSnapMain/GradeSnapMain/gs_distr.gif"), wxBITMAP_TYPE_ANY ), wxDefaultPosition, wxDefaultSize, 0 );
+//	sizer_norm_dist_holder->Add( m_bitmap9, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	
 	gui_panel_stats_sizer_main->Add( sizer_norm_dist_holder, 0, wxEXPAND, 5 );

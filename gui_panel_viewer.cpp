@@ -17,8 +17,8 @@ gui_panel_viewer::gui_panel_viewer( wxWindow* parent, wxWindowID id, const wxPoi
 	wxBoxSizer* bSizer22;
 	bSizer22 = new wxBoxSizer( wxVERTICAL );
 	
-	gs_icon = new wxStaticBitmap( this, wxID_ANY, wxBitmap( wxT("../../Tussuad_Be/workspace/Projects/gs_gui/gs_icon.png"), wxBITMAP_TYPE_ANY ), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer22->Add( gs_icon, 0, wxALL, 5 );
+//	gs_icon = new wxStaticBitmap( this, wxID_ANY, wxBitmap( wxT("Visual Studio 2010/Projects/GradeSnapMain/GradeSnapMain/gs_icon.png"), wxBITMAP_TYPE_ANY ), wxDefaultPosition, wxDefaultSize, 0 );
+//	bSizer22->Add( gs_icon, 0, wxALL, 5 );
 	
 	wxBoxSizer* bSizer29;
 	bSizer29 = new wxBoxSizer( wxHORIZONTAL );
@@ -62,8 +62,8 @@ gui_panel_viewer::gui_panel_viewer( wxWindow* parent, wxWindowID id, const wxPoi
 	wxBoxSizer* bSizer171;
 	bSizer171 = new wxBoxSizer( wxHORIZONTAL );
 	
-	img_test = new wxStaticBitmap( this, wxID_ANY, wxBitmap( wxT("../../Tussuad_Be/workspace/Projects/gs_gui/gs_test.png"), wxBITMAP_TYPE_ANY ), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer171->Add( img_test, 0, wxALL|wxALIGN_BOTTOM|wxALIGN_RIGHT, 5 );
+//	img_test = new wxStaticBitmap( this, wxID_ANY, wxBitmap( wxT("Visual Studio 2010/Projects/GradeSnapMain/GradeSnapMain/gs_test.png"), wxBITMAP_TYPE_ANY ), wxDefaultPosition, wxDefaultSize, 0 );
+//	bSizer171->Add( img_test, 0, wxALL|wxALIGN_BOTTOM|wxALIGN_RIGHT, 5 );
 	
 	wxBoxSizer* bSizer31;
 	bSizer31 = new wxBoxSizer( wxVERTICAL );

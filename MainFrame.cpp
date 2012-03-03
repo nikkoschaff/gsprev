@@ -12,7 +12,7 @@
 MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
-	
+
 	wxBoxSizer* bSizer51;
 	bSizer51 = new wxBoxSizer( wxVERTICAL );
 	
@@ -56,8 +56,7 @@ void MainFrame::onQuickGradeClick( wxCommandEvent& event ) {
 	if ( event.GetId() == home->button_quickgrade->GetId() ) {
 		home->Hide();
 		grade->Show();
-		this->Update();
-		this->Refresh();
+		this->Layout();
 	}
 }
 
@@ -70,8 +69,7 @@ void MainFrame::onGradeButtonClick( wxCommandEvent& event ) {
 		viewer->initList();
 		viewer->refreshInfo();
 		viewer->Show();
-		this->Refresh();
-		this->Update();
+		this->Layout();
 	}
 }
 
@@ -83,7 +81,7 @@ void MainFrame::onStatsButtonClick( wxCommandEvent& event ) {
 		// Switch to stats panel
 		viewer->Hide();
 		stats->Show();
-		this->Refresh();
+		this->Layout();
 		// Has stats panel compute stats
 	}
 }
@@ -94,7 +92,7 @@ void MainFrame::onDoneButtonClick( wxCommandEvent& event ) {
 
 		stats->Hide();
 		home->Show();
-		this->Refresh();
+		this->Layout();
 	}
 
 }

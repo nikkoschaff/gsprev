@@ -9,15 +9,13 @@ $$$3: Set standards
 
 I: TODO
 	A: Viewer
-		1: TODO show exam image when doing refreshInfo
+***		1: TODO show exam image when doing refreshInfo
 			-> Yeah....get around to that
-		4: Create a warning if no key selected
+$$$		4: Create a warning if no key selected
 
 
 	B: GUI - other issues
-		1: Image bitmaps aren't loaded correctly upon startup
-		2: When switching windows, does a strange "gray out" that doesnt fix unless resized
-			->Set all to uniform fixed size
+$$$		1: Image bitmaps aren't loaded correctly upon startup
 
 
 II: Database concerns
