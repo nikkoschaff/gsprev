@@ -34,8 +34,11 @@ public:
 		std::vector< int > studentIDs );
 
 
-
-
+	// Selected info
+	static int selKeyID;
+	static int selClassID;
+	static int selAssignmentID;
+	static std::vector< int > selStudentIDs;
 
 };
 
