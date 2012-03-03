@@ -34,12 +34,32 @@ public:
 		std::vector< int > studentIDs );
 
 
+	void setkeyid( int nid );
+
+	void setassignmentid( int nid );
+
+	void setstudentids( std::vector< int > nids );
+
+	void setcurstudentid( int nid );
+
+	int getkeyid();
+
+	int getassignmentid();
+
+	std::vector< int > getstudentids();
+
+	int getselcurstudentid();
+
+
 	// Selected info
 	static int selKeyID;
-	static int selClassID;
 	static int selAssignmentID;
 	static std::vector< int > selStudentIDs;
 	static int selcurStudentID;
+
+private:
+
+
 
 };
 

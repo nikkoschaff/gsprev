@@ -3,6 +3,10 @@
 
 using namespace std;
 
+int GradeSnapModel::selKeyID = 0;
+int GradeSnapModel::selAssignmentID = 0;
+vector< int > GradeSnapModel::selStudentIDs;
+int GradeSnapModel::selcurStudentID = 0;
 
 GradeSnapModel::GradeSnapModel() {
 
@@ -34,6 +38,7 @@ void GradeSnapModel::evaluateImage( int assignmentID,int classID,
 	// Grades the data and sends it to the database
 	// TODO VERIFY - is this the right thing to do (sending data to db)?
 	Grader::grade( assignmentID, keyResults.at( 0 ), studentResults );
+
 }
 
 // Prints the results to standard output
@@ -89,4 +94,40 @@ void GradeSnapModel::getStats( int assignmentID, int classID,
 	cout << endl <<  "Standard deviation: ";
 	cout << Statistics::standardDeviation( 
 		assignmentID, studentIDs ) << endl;
+}
+
+void GradeSnapModel::setkeyid( int nid ) {
+	GradeSnapModel::selKeyID = nid;
+}
+
+void GradeSnapModel::setassignmentid( int nid ) {
+	GradeSnapModel::selAssignmentID = nid;
+}
+
+void GradeSnapModel::setstudentids( std::vector< int > nids ) {
+	GradeSnapModel::selStudentIDs = nids;
+}
+
+void GradeSnapModel::setcurstudentid( int nid ) {
+	GradeSnapModel::selcurStudentID = nid;
+}
+
+int GradeSnapModel::getkeyid() {
+	int i = GradeSnapModel::selKeyID;
+	return i;
+}
+
+int GradeSnapModel::getassignmentid() {
+	int i = GradeSnapModel::selAssignmentID;
+	return i;
+}
+
+std::vector< int > GradeSnapModel::getstudentids() {
+	vector< int > is = GradeSnapModel::selStudentIDs;
+	return is;
+}
+
+int GradeSnapModel::getselcurstudentid() {
+	int i = GradeSnapModel::selcurStudentID;
+	return i;
 }

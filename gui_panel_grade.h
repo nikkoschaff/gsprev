@@ -22,6 +22,10 @@
 #include <wx/button.h>
 #include <wx/panel.h>
 
+#include <vector>
+#include "GradeSnapModel.h"
+#include "DBManager.h"
+
 ///////////////////////////////////////////////////////////////////////////
 
 
@@ -46,10 +50,10 @@ class gui_panel_grade : public wxPanel
 		// Virtual event handlers, overide them in your derived class
 		virtual void onNameTextEnter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onNumQuestionsTextEnter( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnFileChanged( wxFileDirPickerEvent& event ) { event.Skip(); }
+		virtual void OnFileChanged( wxFileDirPickerEvent& event );
 		virtual void onListElementSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onCheckListBoxToggled( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onGradeButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onGradeButtonClick( wxCommandEvent& event );
 		
 	
 	public:

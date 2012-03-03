@@ -36,7 +36,7 @@
 class gui_panel_viewer : public wxPanel 
 {
 	private:
-
+		GradeSnapModel gsm;
 
 	protected:
 		wxStaticBitmap* gs_icon;

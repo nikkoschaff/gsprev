@@ -3,6 +3,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
+using namespace std;
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -115,4 +116,76 @@ gui_panel_grade::~gui_panel_grade()
 	panel_grade_listbox->Disconnect( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, wxCommandEventHandler( gui_panel_grade::onCheckListBoxToggled ), NULL, this );
 	panel_grade_gradebutton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( gui_panel_grade::onGradeButtonClick ), NULL, this );
 	
+}
+
+// TODO set internal filename data
+void gui_panel_grade::OnFileChanged( wxFileDirPickerEvent& event) {
+
+}
+
+// finalize data and grade, then progress to next window
+void gui_panel_grade::onGradeButtonClick( wxCommandEvent& event ) {
+
+	int classID = 1;
+	int keyID;
+	int assignmentID;
+	int numQuestions = atoi( num_quest_input->GetLabelText().c_str() ) ;
+	std::vector< std::pair< int, std::string > > studentFilePairs;
+	string keyFilename = panel_grade_listbox->GetString( panel_grade_listbox->GetSelection() ).ToStdString();
+
+	assignmentID = DBManager::makeDataObject( "Assignment", name_input->GetLabelText().ToStdString() );
+
+	// Create key, link to assignment, set filename
+	keyID =	DBManager::makeDataObject( "Student", keyFilename );
+
+	DBManager::linkAToB( "LinkerStudentAssignment", assignmentID, "AssignmentID", 
+		keyID, "StudentID" );
+	DBManager::setLinkedValues( "LinkerStudentAssignment", keyID, assignmentID, 
+		"StudentID", "AssignmentID", "key", "YES" );
+	DBManager::setLinkedValues( "LinkerStudentAssignment", keyID, assignmentID,
+		"StudentID", "AssignmentID", "filename", keyFilename );
+
+	// Pair for use in the model
+	pair< int, string > keyFilePair( keyID, keyFilename );
+
+	// Vector of student IDs
+	vector< int > studentIDs;
+
+	vector< string > studentExamFilenames;
+
+	// Gets filenames from the listbox and places into exam filename vector
+	for( unsigned int i = 0; i < panel_grade_listbox->GetSize().y; i++ ) {
+		studentExamFilenames.push_back( panel_grade_listbox->GetString( i ).ToStdString() );
+	}
+
+
+	// Gets student IDs by setting them to be in the DB and finding their ID
+	//	Links the necessary student data and pushes their info into the pair vector
+	for( unsigned int i = 0; i < studentExamFilenames.size(); i++ ) {
+		string name = studentExamFilenames.at( i );
+
+		// Extracts information about the studentID and places corresponding
+		//	student data into the database
+		int sID = DBManager::makeDataObject( "Student", name );
+		DBManager::linkAToB( "LinkerStudentAssignment", assignmentID, "AssignmentID", 
+			sID, "StudentID" );
+		DBManager::linkAToB( "LinkerClassStudent", classID, "ClassID", sID, "StudentID" );
+		DBManager::setLinkedValues( "LinkerStudentAssignment", sID, assignmentID,
+			"StudentID", "AssignmentID", "filename", name );
+		// Pushes student ID and name to the student pair vector
+		studentFilePairs.push_back( pair< int, string >( sID, name ) );
+		studentIDs.push_back( sID );
+	}
+
+	// Grade via gsm
+	GradeSnapModel gsm;
+	gsm.evaluateImage( assignmentID, classID, keyFilePair, studentFilePairs, numQuestions );
+
+
+	// Save values in gsm
+	gsm.setkeyid( keyID );
+	gsm.setassignmentid( assignmentID );
+	gsm.setstudentids( studentIDs );
+
+	event.Skip();
 }
