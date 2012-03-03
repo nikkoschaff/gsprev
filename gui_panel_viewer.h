@@ -24,6 +24,7 @@
 #include <wx/imagjpeg.h>
 
 #include "DBManager.h"
+#include <vector>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -53,6 +54,13 @@ class gui_panel_viewer : public wxPanel
 		virtual void onStatsButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onStudentNameTextEnter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onGradeTextEnter( wxCommandEvent& event ) { event.Skip(); }
+
+		// Model/backend data
+
+
+
+		// Refreshes the list for display with correct currently-selected
+		void refresh();
 		
 	
 	public:

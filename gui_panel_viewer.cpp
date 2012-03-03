@@ -110,6 +110,10 @@ gui_panel_viewer::gui_panel_viewer( wxWindow* parent, wxWindowID id, const wxPoi
 	button_stats->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( gui_panel_viewer::onStatsButtonClick ), NULL, this );
 	name_input->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( gui_panel_viewer::onStudentNameTextEnter ), NULL, this );
 	grade_output->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( gui_panel_viewer::onGradeTextEnter ), NULL, this );
+
+	//TODO make and call refresh() to set up the list with model data
+
+
 }
 
 gui_panel_viewer::~gui_panel_viewer()
@@ -121,3 +125,5 @@ gui_panel_viewer::~gui_panel_viewer()
 	grade_output->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( gui_panel_viewer::onGradeTextEnter ), NULL, this );
 	
 }
+
+// TODO refresh - currently-selected= display (w/info), populate sidebar list
