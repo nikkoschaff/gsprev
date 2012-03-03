@@ -9,6 +9,10 @@ $$$3: Set standards
 
 I: TODO
 
+	B: GUI - other issues
+		2: When switching windows, does a strange "gray out" that doesnt fix unless resized
+			->Set all to uniform fixed size
+
 
 	A: Verify: store answers after directly after grading - good or bad idea?
 		-- may be easier to work with at higher level before saving

@@ -39,6 +39,7 @@ public:
 	static int selClassID;
 	static int selAssignmentID;
 	static std::vector< int > selStudentIDs;
+	static int selcurStudentID;
 
 };
 

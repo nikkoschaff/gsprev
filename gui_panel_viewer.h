@@ -24,7 +24,9 @@
 #include <wx/imagjpeg.h>
 
 #include "DBManager.h"
+#include "GradeSnapModel.h"
 #include <vector>
+#include <string>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -34,7 +36,7 @@
 class gui_panel_viewer : public wxPanel 
 {
 	private:
-	
+
 
 	protected:
 		wxStaticBitmap* gs_icon;
@@ -50,21 +52,18 @@ class gui_panel_viewer : public wxPanel
 		wxGauge* m_gauge1;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void onListElementClicked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onListElementClicked( wxCommandEvent& event );
 		virtual void onStatsButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onStudentNameTextEnter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onGradeTextEnter( wxCommandEvent& event ) { event.Skip(); }
 
-		// Model/backend data
 
-
-
-		// Refreshes the list for display with correct currently-selected
-		void refresh();
 		
 	
 	public:
 
+		// Refreshes the list for display with correct currently-selected
+		void refreshInfo();
 		
 		gui_panel_viewer( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 800,600 ), long style = wxTAB_TRAVERSAL ); 
 		~gui_panel_viewer();

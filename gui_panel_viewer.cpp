@@ -1,5 +1,7 @@
 
+
 #include "gui_panel_viewer.h"
+
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -110,10 +112,6 @@ gui_panel_viewer::gui_panel_viewer( wxWindow* parent, wxWindowID id, const wxPoi
 	button_stats->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( gui_panel_viewer::onStatsButtonClick ), NULL, this );
 	name_input->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( gui_panel_viewer::onStudentNameTextEnter ), NULL, this );
 	grade_output->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( gui_panel_viewer::onGradeTextEnter ), NULL, this );
-
-	//TODO make and call refresh() to set up the list with model data
-
-
 }
 
 gui_panel_viewer::~gui_panel_viewer()
@@ -127,3 +125,69 @@ gui_panel_viewer::~gui_panel_viewer()
 }
 
 // TODO refresh - currently-selected= display (w/info), populate sidebar list
+void gui_panel_viewer::refreshInfo() {
+
+
+	int curstudentrow = atoi( DBManager::getLinkedValues( "LinkerStudentAssignment", GradeSnapModel::selcurStudentID,
+		GradeSnapModel::selAssignmentID, "StudentID", "AssignmentID" ).at( 0 ).c_str() );
+
+	// TODO set image based on selstudentID
+	wxString curstudenttest = wxString::FromAscii( DBManager::getDataObjectValue( 
+		"LinkerStudentAssignment", curstudentrow, "filename").c_str() );
+
+
+	// set sel name
+	wxString curstudentname = wxString::FromAscii( DBManager::getDataObjectValue(
+		"LinkerStudentAssignment", curstudentrow, "name" ).c_str() );
+	name_input->SetLabelText( curstudentname );
+
+	// set sel grade
+
+	wxString curstudentgrade = wxString::FromAscii( DBManager::getDataObjectValue( 
+		"LinkerStudentAssignment", curstudentrow, "grade" ).c_str() );
+	grade_output->SetLabelText( curstudentgrade );
+
+
+	// set panel_viewer_listbox to fill with studentIDs, with FIRST being keyID
+	std::string studentname;
+	int keyrow = atoi( DBManager::getLinkedValues( "LinkerStudentAssignment", GradeSnapModel::selKeyID,
+			GradeSnapModel::selAssignmentID, "StudentID", "AssignmentID" ).at( 0 ).c_str() );
+	std::string keyfilename = DBManager::getDataObjectValue( "LinkerStudentAssignment", keyrow, "filename" );
+	std::string keyname = GradeSnapModel::selKeyID + "-" + keyfilename;
+	panel_viewer_listbox->SetString( 0, wxString::FromAscii( keyname.c_str() ) );
+	for( int i = 1; i < GradeSnapModel::selStudentIDs.size(); i++ ) {
+		// Gets Id from the model, sets it to matching index position in the listbox
+		int studentrow = atoi( DBManager::getLinkedValues( "LinkerStudentAssignment", GradeSnapModel::selStudentIDs.at( i ),
+			GradeSnapModel::selAssignmentID, "StudentID", "AssignmentID" ).at( 0 ).c_str() );
+		std::string filename = DBManager::getDataObjectValue( "LinkerStudentAssignment", studentrow, "filename" );
+
+		studentname = GradeSnapModel::selStudentIDs.at( i ) + "-" + filename;
+		panel_viewer_listbox->SetString( i, wxString::FromAscii( studentname.c_str() ) );
+
+	}
+
+}
+
+//callback for clicking on listbox/selecting test (calls refresh at the end)
+void gui_panel_viewer::onListElementClicked( wxCommandEvent& event ) {
+
+
+	int sel = panel_viewer_listbox->GetSelection();
+	std::string selidstr = panel_viewer_listbox->GetString( sel );
+
+	std::string idstr;
+	// Get only the id portions
+	int stridx = 0;
+	while ( selidstr.at( stridx ) != '-' ) {
+		// TODO make sure the comparison operator works
+		idstr = idstr + selidstr.at( stridx );
+		stridx++;
+	}
+
+	int id = atoi( idstr.c_str() );
+
+	GradeSnapModel::selcurStudentID = id;
+
+	refreshInfo();
+}
+
