@@ -43,14 +43,15 @@ class gui_panel_grade : public wxPanel
 		wxTextCtrl* name_input;
 		wxTextCtrl* num_quest_input;
 		wxStaticText* m_staticText8;
-		wxFilePickerCtrl* filePicker;
 		wxCheckListBox* panel_grade_listbox;
 
+		//wildcard
+		wxButton* browse;
+		virtual void OnBrowseClick( wxCommandEvent& event );
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void onNameTextEnter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onNumQuestionsTextEnter( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnFileChanged( wxFileDirPickerEvent& event );
 		virtual void onListElementSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onCheckListBoxToggled( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onGradeButtonClick( wxCommandEvent& event );

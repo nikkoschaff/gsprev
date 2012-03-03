@@ -66,10 +66,11 @@ gui_panel_grade::gui_panel_grade( wxWindow* parent, wxWindowID id, const wxPoint
 	
 	bSizer13->Add( m_staticText8, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	filePicker = new wxFilePickerCtrl( this, wxID_ANY, wxEmptyString, wxT("Select a file"), wxT("*.*"), wxDefaultPosition, wxDefaultSize, wxFLP_DEFAULT_STYLE );
-	bSizer13->Add( filePicker, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	browse = new wxButton( this, wxID_ANY, wxT("Browse"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer13->Add( browse, 0, wxEXPAND, 5 );
+
 	
-	
+
 	bSizer10->Add( bSizer13, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	wxArrayString panel_grade_listboxChoices;
@@ -100,10 +101,11 @@ gui_panel_grade::gui_panel_grade( wxWindow* parent, wxWindowID id, const wxPoint
 	// Connect Events
 	name_input->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( gui_panel_grade::onNameTextEnter ), NULL, this );
 	num_quest_input->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( gui_panel_grade::onNumQuestionsTextEnter ), NULL, this );
-	filePicker->Connect( wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEventHandler( gui_panel_grade::OnFileChanged ), NULL, this );
 	panel_grade_listbox->Connect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( gui_panel_grade::onListElementSelected ), NULL, this );
 	panel_grade_listbox->Connect( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, wxCommandEventHandler( gui_panel_grade::onCheckListBoxToggled ), NULL, this );
 	panel_grade_gradebutton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( gui_panel_grade::onGradeButtonClick ), NULL, this );
+
+	browse->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( gui_panel_grade::OnBrowseClick ), NULL, this );
 }
 
 gui_panel_grade::~gui_panel_grade()
@@ -111,17 +113,23 @@ gui_panel_grade::~gui_panel_grade()
 	// Disconnect Events
 	name_input->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( gui_panel_grade::onNameTextEnter ), NULL, this );
 	num_quest_input->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( gui_panel_grade::onNumQuestionsTextEnter ), NULL, this );
-	filePicker->Disconnect( wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEventHandler( gui_panel_grade::OnFileChanged ), NULL, this );
 	panel_grade_listbox->Disconnect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( gui_panel_grade::onListElementSelected ), NULL, this );
 	panel_grade_listbox->Disconnect( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, wxCommandEventHandler( gui_panel_grade::onCheckListBoxToggled ), NULL, this );
 	panel_grade_gradebutton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( gui_panel_grade::onGradeButtonClick ), NULL, this );
 	
+
+	browse->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( gui_panel_grade::OnBrowseClick ), NULL, this );
 }
 
-// TODO set internal filename data
-void gui_panel_grade::OnFileChanged( wxFileDirPickerEvent& event) {
+// TODO finish - SET INFO FOUND TO BE IN PANEL_GRADE_LISTBOX
+void gui_panel_grade::OnBrowseClick( wxCommandEvent& event ) {
+	wxFileDialog *picker = new wxFileDialog( this, wxT("Select a file"), wxEmptyString, wxEmptyString, wxT("*.*"), wxFLP_OPEN|wxFD_MULTIPLE );
 
+	if( picker->ShowModal() == wxID_CANCEL ) {
+		return ;
+	}
 }
+
 
 // finalize data and grade, then progress to next window
 void gui_panel_grade::onGradeButtonClick( wxCommandEvent& event ) {
