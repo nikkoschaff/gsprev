@@ -125,9 +125,16 @@ gui_panel_grade::~gui_panel_grade()
 void gui_panel_grade::OnBrowseClick( wxCommandEvent& event ) {
 	wxFileDialog *picker = new wxFileDialog( this, wxT("Select a file"), wxEmptyString, wxEmptyString, wxT("*.*"), wxFLP_OPEN|wxFD_MULTIPLE );
 
-	if( picker->ShowModal() == wxID_CANCEL ) {
-		return ;
+	if( picker->ShowModal() == wxID_OK ) {
+		wxArrayString fnames;
+		picker->GetFilenames( fnames );
+		// TODO fix - issue with "Sorted"
+		// TODO fix - multiple boxes selectable
+		panel_grade_listbox->InsertItems( fnames, panel_grade_listbox->GetCount() );
+
 	}
+
+	
 }
 
 
@@ -162,7 +169,8 @@ void gui_panel_grade::onGradeButtonClick( wxCommandEvent& event ) {
 	vector< string > studentExamFilenames;
 
 	// Gets filenames from the listbox and places into exam filename vector
-	for( unsigned int i = 0; i < panel_grade_listbox->GetSize().y; i++ ) {
+	for( int i = 0; i < panel_grade_listbox->GetSize().y; i++ ) {
+		// TODO fix - doesn't accept the information properly from the listbox
 		studentExamFilenames.push_back( panel_grade_listbox->GetString( i ).ToStdString() );
 	}
 
