@@ -34,16 +34,13 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="GUI\GSApp">
+      <UniqueIdentifier>{66a2623c-7a08-489f-8311-dff25381bb53}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Notes.h">
       <Filter>Backend\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GradeSnapMain.h">
-      <Filter>GUI\MainWindow</Filter>
-    </ClInclude>
-    <ClInclude Include="HomeWindow.h">
-      <Filter>GUI\HomeWindow</Filter>
     </ClInclude>
     <ClInclude Include="DBManager.h">
       <Filter>Backend\Header Files</Filter>
@@ -66,14 +63,26 @@
     <ClInclude Include="Statistics.h">
       <Filter>Backend\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MainFrame.h">
+      <Filter>GUI\MainWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_panel_home.h">
+      <Filter>GUI\HomeWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="GradeSnapApp.h">
+      <Filter>GUI\GSApp</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_panel_grade.h">
+      <Filter>GUI\QuickGradeWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_panel_viewer.h">
+      <Filter>GUI\TestViewerWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_panel_stats.h">
+      <Filter>GUI\StatsWindow</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GradeSnapMain.cpp">
-      <Filter>GUI\MainWindow</Filter>
-    </ClCompile>
-    <ClCompile Include="HomeWindow.cpp">
-      <Filter>GUI\HomeWindow</Filter>
-    </ClCompile>
     <ClCompile Include="DBManager.cpp">
       <Filter>Backend\Source Files</Filter>
     </ClCompile>
@@ -94,6 +103,24 @@
     </ClCompile>
     <ClCompile Include="Statistics.cpp">
       <Filter>Backend\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFrame.cpp">
+      <Filter>GUI\MainWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_panel_home.cpp">
+      <Filter>GUI\HomeWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="GradeSnapApp.cpp">
+      <Filter>GUI\GSApp</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_panel_grade.cpp">
+      <Filter>GUI\QuickGradeWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_panel_viewer.cpp">
+      <Filter>GUI\TestViewerWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_panel_stats.cpp">
+      <Filter>GUI\StatsWindow</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

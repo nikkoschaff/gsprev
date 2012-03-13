@@ -81,12 +81,16 @@
   <ItemGroup>
     <ClInclude Include="DBManager.h" />
     <ClInclude Include="Grader.h" />
-    <ClInclude Include="GradeSnapMain.h" />
+    <ClInclude Include="GradeSnapApp.h" />
     <ClInclude Include="GradeSnapModel.h" />
-    <ClInclude Include="HomeWindow.h" />
+    <ClInclude Include="gui_panel_grade.h" />
+    <ClInclude Include="gui_panel_home.h" />
+    <ClInclude Include="gui_panel_stats.h" />
+    <ClInclude Include="gui_panel_viewer.h" />
     <ClInclude Include="ImageEvaluator.h" />
     <ClInclude Include="ImageManager.h" />
     <ClInclude Include="ImageReadException.h" />
+    <ClInclude Include="MainFrame.h" />
     <ClInclude Include="Notes.h" />
     <ClInclude Include="Statistics.h" />
   </ItemGroup>
@@ -94,11 +98,15 @@
     <ClCompile Include="DBManager.cpp" />
     <ClCompile Include="Grader.cpp" />
     <ClCompile Include="GradeSnap.cpp" />
-    <ClCompile Include="GradeSnapMain.cpp" />
+    <ClCompile Include="GradeSnapApp.cpp" />
     <ClCompile Include="GradeSnapModel.cpp" />
-    <ClCompile Include="HomeWindow.cpp" />
+    <ClCompile Include="gui_panel_grade.cpp" />
+    <ClCompile Include="gui_panel_home.cpp" />
+    <ClCompile Include="gui_panel_stats.cpp" />
+    <ClCompile Include="gui_panel_viewer.cpp" />
     <ClCompile Include="ImageEvaluator.cpp" />
     <ClCompile Include="ImageManager.cpp" />
+    <ClCompile Include="MainFrame.cpp" />
     <ClCompile Include="Statistics.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

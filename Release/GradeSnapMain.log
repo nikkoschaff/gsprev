@@ -1,0 +1,17 @@
+﻿  Grader.cpp
+  GradeSnap.cpp
+  GradeSnapApp.cpp
+  GradeSnapModel.cpp
+  gui_panel_grade.cpp
+  gui_panel_home.cpp
+  gui_panel_stats.cpp
+  gui_panel_viewer.cpp
+  ImageEvaluator.cpp
+ImageEvaluator.cpp(119): warning C4101: 'e' : unreferenced local variable
+ImageEvaluator.cpp(409): warning C4101: 'e' : unreferenced local variable
+  ImageManager.cpp
+  MainFrame.cpp
+  Statistics.cpp
+  Generating code
+  Finished generating code
+  GradeSnapMain.vcxproj -> C:\Users\Nikko\documents\visual studio 2010\Projects\GradeSnapMain\Release\GradeSnapMain.exe
