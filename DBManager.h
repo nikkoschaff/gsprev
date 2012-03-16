@@ -16,6 +16,7 @@
 
 // Local header includes
 #include "sqlite3.h"
+#include "DBOutOfBoundsException.h"
 
 namespace DBManager {
 

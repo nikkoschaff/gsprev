@@ -108,6 +108,7 @@ void DBManager::removeDataObject( string tablename, int objectID, string colID )
 	if ( rc ) {
 		cerr << "Error: " << sqlite3_errmsg( db ) << endl << endl;
 		sqlite3_free( error );
+		throw DBOutOfBoundsException;
 	}
 
 }
@@ -134,6 +135,7 @@ void DBManager::setDataObjectValue( string tablename, int objectID,
 	if ( rc ) {
 		cerr << "Error: " << sqlite3_errmsg( db ) << endl << endl;
 		sqlite3_free( error );
+		throw DBOutOfBoundsException;
 	}
 
 }
@@ -162,6 +164,7 @@ string DBManager::getDataObjectValue( string tablename, int objectID,
 	if ( rc ) {
 		cerr << "Error: " << sqlite3_errmsg( db ) << endl << endl;
 		sqlite3_free( error );
+		throw DBOutOfBoundsException;
 	}
 	string key( colValue );
 	if ( valMap.find( key )->second.at( 0 ).size() == 0 ) {
@@ -189,6 +192,7 @@ vector< int > DBManager::getDataObjectID( std::string tablename, std::string col
 	if ( rc ) {
 		cerr << "Error: " << sqlite3_errmsg( db ) << endl << endl;
 		sqlite3_free( error );
+		throw DBOutOfBoundsException;
 	}
 	string key( tablename + "ID" );
 	vector< string > returnstr;
@@ -223,6 +227,7 @@ void DBManager::setAllDataObjectValues( string tablename,
 	if ( rc ) {
 		cerr << "Error: " << sqlite3_errmsg( db ) << endl << endl;
 		sqlite3_free( error );
+		throw DBOutOfBoundsException;
 	}
 
 
@@ -245,6 +250,7 @@ vector< string > DBManager::getAllDataObjectValues( string tablename, string col
 	if ( rc ) {
 		cerr << "Error: " << sqlite3_errmsg( db ) << endl << endl;
 		sqlite3_free( error );
+		throw DBOutOfBoundsException;
 	}
 
 	// Convert char* values to string
@@ -280,6 +286,7 @@ void DBManager::linkAToB( string tablename, int aID, string aIDCol,
 	if ( rc ) {
 		cerr << "Error: " << sqlite3_errmsg( db ) << endl << endl;
 		sqlite3_free( error );
+		throw DBOutOfBoundsException;
 	}
 }
 
@@ -309,6 +316,7 @@ void DBManager::unlinkAFromB( string tablename, int aID, string aIDCol,
 	if ( rc ) {
 		cerr << "Error: " << sqlite3_errmsg( db ) << endl << endl;
 		sqlite3_free( error );
+		throw DBOutOfBoundsException;
 	}
 }
 
@@ -344,6 +352,7 @@ std::vector< std::string > DBManager::getLinkedValues( std::string tablename,
 	if ( rc ) {
 		cerr << "Error: " << sqlite3_errmsg( db ) << endl << endl;
 		sqlite3_free( error );
+		throw DBOutOfBoundsException;
 	}
 
 	// Convert char* values to string
@@ -384,6 +393,7 @@ void DBManager::setLinkedValues( string tablename, int aID, int bID,
 	if ( rc ) {
 		cerr << "Error: " << sqlite3_errmsg( db ) << endl << endl;
 		sqlite3_free( error );
+		throw DBOutOfBoundsException;
 	}
 
 }
