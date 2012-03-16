@@ -272,7 +272,7 @@ std::vector< std::pair< char, double > > Statistics::gradeDistribution( int assi
 	return dist;
 }
 
-// TODO normal distribution
+// normal distribution
 double Statistics::standardDeviation( int assignmentID,
 	std::vector< int > studentIDs, double mean  ) {
 
