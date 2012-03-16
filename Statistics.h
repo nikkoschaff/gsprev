@@ -32,6 +32,9 @@ namespace Statistics {
 	std::vector< std::pair< std::string, double > > answerAccuracy( int assignmentID,
 		std::vector< int > studentIDs, int keyID );
 
+	// Percentage of the most-chosen incorrect answers
+	std::vector< std::pair< std::string, double > > incorrectAnswerAccuracy( 
+		int assignmentID, std::vector< int > studentIDs, int keyID );
 
 	// Finds standard deviation
 	double standardDeviation( int assignmentID,
@@ -41,6 +44,7 @@ namespace Statistics {
 	// Helper function to get an array of letters from the answer letters
 	std::vector< std::string > getLettersVector( std::string answers );
 
+	
 };
 
 

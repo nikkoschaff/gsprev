@@ -116,9 +116,6 @@ std::vector< std::pair< std::string, double > > Statistics::answerAccuracy( int 
 	for( unsigned int i = 0; i < keyVect.size(); i++ ) {
 		results.push_back( pair< string, double >( keyVect.at( i ), 0 ) );
 	}
-	
-
-	vector< string > studentVect;
 
 	// Get the answers from the studentID and add 1 to results for every correct one
 	vector< string > answersVect;
@@ -145,6 +142,91 @@ std::vector< std::pair< std::string, double > > Statistics::answerAccuracy( int 
 		results.at( i ).second = ( results.at( i ).second / ids.size() ) * 100;
 	}
 	return results;
+}
+
+// Percentage of the most-chosen incorrect answers
+std::vector< std::pair< std::string, double > > Statistics::incorrectAnswerAccuracy( 
+		int assignmentID, std::vector< int > studentIDs, int keyID ) {
+
+	vector< pair< string, double > > badAnswers;
+	vector< int > ids;
+
+	// Get the IDs of the rows containing the grades
+	for( unsigned int i = 0; i < studentIDs.size(); i++ ) {
+		ids.push_back( atoi( DBManager::getLinkedValues( "LinkerStudentAssignment", assignmentID,
+			studentIDs.at( i ), "AssignmentID", "StudentID" ).at( 0 ).c_str() ) );
+	}
+
+	// Get the answers from the key
+	int key = atoi( DBManager::getLinkedValues( "LinkerStudentAssignment", assignmentID,
+		keyID, "AssignmentID", "StudentID" ).at( 0 ).c_str() );
+	string keyAnswers = DBManager::getDataObjectValue( "LinkerStudentAssignment", 
+		key, "answers" );	
+
+	// Vector to hold every answer entered for each question asked
+	vector< map< string, int > > fullAnswers = vector< map< string, int > >();
+
+	// Set up key vector and use to set up results
+	vector< string > keyVect = Statistics::getLettersVector( keyAnswers );
+	for( unsigned int i = 0; i < keyVect.size(); i++ ) {
+		results.push_back( pair< string, double >( keyVect.at( i ), 0 ) );
+	}
+
+	vector< string > studentVect;
+
+	// Get the answers from the studentID and add 1 to results for every correct one
+	vector< string > answersVect;
+	map< string, int >::iterator mapIt;
+	for( unsigned int sIndex = 0; sIndex < ids.size(); sIndex++ ) {
+		
+		// String of student answers
+		string studentAnswers = DBManager::getDataObjectValue( "LinkerStudentAssignment",
+			ids.at( sIndex ), "answers" );
+
+		answersVect = Statistics::getLettersVector( studentAnswers );
+
+		// Either adds a blank or a character, or increments the count if already there
+		for( unsigned int i = 0; i < keyVect.size(); i++ ) {
+			if ( i >= answersVect.size() ) {
+				if( ( mapIt = fullAnswers.at( i ).find( "" ) ) == fullAnswers.end() ) {
+					fullAnswers.at( i ).insert( pair< string, int >( "", 0 ) );
+				} else {
+					fullAnswers.at( i ).find( "" )->second++;
+				}
+			} else {
+				if( ( mapIt = fullAnswers.at( i ).find( answersVect.at( i ) ) ) == fullAnswers.end()  ) {
+					fullAnswers.at( i ).insert( pair< string, int >( answersVect.at( i ), 0 ) );
+				} else {
+					fullAnswers.at( i ).find( answersVect.at( i ) )->second++;
+				}
+			}
+
+		}		
+	}
+
+	// Find (incorrect) letter with highest frequency.  Save % in badAnswers
+	pair< string, double > letterAndFreq;
+	for( unsigned int i = 0; i < fullAnswers.size(); i++ ) {
+
+		string letter;
+		int freq = 0;
+		double freqPercentage;
+
+		for( mapIt = fullAnswers.at( i ).begin();
+			mapIt != fullAnswers.at( i ).end(); i++ ) {
+
+			if( mapIt->second > freqs && mapIt->first.compare( keyVect.at( i ) ) != 0 ) {
+				freq = mapIt->second;
+				letter = mapIt->first;
+			}
+		}
+
+		freqPercentage = freq / studentIDs.size();
+
+		badAnswers.push_back( pair< string, double >( letter, freqPercentage ) );
+	}
+
+	return badAnswers;
 }
 
 // Shows the distribution for letter grades
