@@ -5,6 +5,7 @@
 
 #include "DBManager.h"
 #include "sqlite3.h"
+#include "DBOutOfBoundsException.h"
 
 using namespace std;
 
