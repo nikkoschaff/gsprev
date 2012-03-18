@@ -62,11 +62,21 @@ vector< string > ImageEvaluator::readExamImage( string filename ) {
 	// Read the answers from the regions
 	readExamAnswers();
 
+	// Sets and pushes back the ambiguous answers as a string
+	string ambiguous = "";
+	for( int i = 0; i < ambiguousAnswers.size(); i++ ) {
+		char * str;
+		ambiguous = ambiguous + string( itoa( ambiguousAnswers.at( i ), str, 10 ) ) + ",";
+	}
+	answersVector.push_back( ambiguous );
+
 	// Sets the name as a string specified in the header
 	readExamName();
 
 	// Pushes the name to the last region in the vector
 	answersVector.push_back( name );
+
+	
 
 	// Return a vector of the answers with the name tacked along at the end
 	return answersVector;
@@ -233,6 +243,8 @@ string ImageEvaluator::cv_getAnswer( Rect answerRegion ) {
 		// Assigns the darkCount a resolution-thresh modified value
 		darkCount = darkCount / threshModifier;
 		
+		// TODO handle ambiguous case - add question location to ambiguous if unsure
+
 		// Checks to see if it accurately corresponds with an answer region
 		if ( a == 0 ) {
 			modified = darkCount - 1151;

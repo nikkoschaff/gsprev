@@ -25,9 +25,9 @@ namespace ImageManager {
 	 *		Assignment, for every image in the imagefile
 	 *
 	 */
-	std::vector< std::pair< int, std::vector< std::string > > >
+	std::vector< std::vector< std::string > >
 		readAssignmentSetFromImage( std::vector< 
-		std::pair< int, std::string > > theFilenames, int numQ );
+		std::string > theFilenames, int numQ );
 };
 
 

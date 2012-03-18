@@ -159,6 +159,8 @@ private:
 	std::vector< std::string > answersVector;
 	// Name of the test-taker (taken from image bubbles)
 	std::string name;
+	// Vector of questions with ambiguous answers (bad fill-in)
+	std::vector< int > ambiguousAnswers;
 
 	/// Calibration corner points
 	/// Upper-Left

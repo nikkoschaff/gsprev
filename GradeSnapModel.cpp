@@ -17,30 +17,193 @@ GradeSnapModel::~GradeSnapModel() {
 }
 
 
-// At this level the student-to-ID has either already been paired, or 
-//	set unknown students to be of ID -1
+// At this point, NOTHING is explicitly known about the images.  Only the filenames
 void GradeSnapModel::evaluateImage( int assignmentID,int classID, 
-	std::pair< int, std::string > keyFilePair,
-	std::vector< std::pair< int, std::string > > filenames )  {
+	string keyFilename,
+	std::vector< string > filenames )  {
 
+	// General members
 	int numQ = atoi( DBManager::getDataObjectValue( "Assignment", assignmentID, "AssignmentID" ).c_str() );
+	char* itoastr;
 
-	// Stores the key in a vector for image evaluation
-	// Evaluates and returns the data from the image
-	vector< pair< int, string > > keyVector;
-	keyVector.push_back( keyFilePair );
-	std::vector< std::pair< int, std::vector< std::string > > > keyResults;
-	keyResults = ImageManager::readAssignmentSetFromImage( keyVector, numQ );
+	// Key members
+	string keyAmbiguous;
+	string keyName;
+	string keyAnswers;
+	vector< string > keyVect;
+	vector< vector< string > > keyReturnVect; 
+	int keyImgFileID;
+	int keyStudentID;
+	int keyLSAID;
+	string keyQs;
 
-	// Stores the image data in a vector for image evaluation
-	//	Evaluates and returns the data from the image
-	std::vector< std::pair< int, std::vector< std::string > > > studentResults;
-	studentResults = ImageManager::readAssignmentSetFromImage( filenames, numQ );
+	// Student members
+	string studentAmbiguous;
+	string studentName;
+	string studentAnswers;
+	vector< string > studentVect;
+	vector< vector< string > > studentReturnVect;
+	vector< int > studentIDs;
+	int studentImgFileID;
+	int studentID;
+	int studentLSAID;
+
+
+	// ----- KEY HANDLING -----
+
+	// Get the results from the key
+	keyVect.push_back( keyFilename );
+	keyReturnVect = ImageManager::readAssignmentSetFromImage(
+		keyVect, numQ );
+	keyVect = keyReturnVect.at( 0 );
+	keyVect.pop_back();
+	keyAmbiguous = keyVect.at( keyVect.size() - 1 );
+	keyVect.pop_back();
+
+	// Put key in DB at ImageFile
+	keyImgFileID = DBManager::makeDataObject( "ImageFile", keyFilename );
+	keyName = "KEY" + string( itoa( keyImgFileID, itoastr, 10 ) );
+	itoastr = "";
+
+	// Get studentID from key in Student table
+	keyStudentID = DBManager::makeDataObject( "Student", keyName );
+
+	// Fill out key ImageFile table values
+	DBManager::setDataObjectValue( "ImageFile", keyImgFileID, "StudentID",
+		string( itoa( keyStudentID, itoastr, 10 ) ) );
+	itoastr = "";
+	DBManager::setDataObjectValue( "ImageFile", keyImgFileID, "AssignmentID", 
+		string( itoa( assignmentID, itoastr, 10 ) ) );
+	itoastr = "";
+	DBManager::setDataObjectValue( "ImageFile", keyImgFileID, "graded", 
+		string( itoa( 1, itoastr, 10 ) ) );
+	itoastr = "";
+	DBManager::setDataObjectValue( "ImageFile", keyImgFileID, "AssignmentID", 
+		string( itoa( assignmentID, itoastr, 10 ) ) );
+	DBManager::setDataObjectValue( "ImageFile", keyImgFileID, "ambiguousAnswers", 
+		keyAmbiguous );
+	keyAnswers = answersFromVector( keyVect );
+	DBManager::setDataObjectValue( "ImageFile", keyImgFileID, "answers", keyAnswers );
+	
+	// Link key to LSA
+	DBManager::linkAToB( "LinkerStudentAssignment", keyStudentID, "StudentID", 
+		keyImgFileID, "ImageFileID" );
+
+	// Set key LSA values
+	keyLSAID = atoi( DBManager::getLinkedValues( "LinkerStudentAssignment",
+		keyStudentID, keyImgFileID, "StudentID", "ImageFileID" ).at( 0 ).c_str() );
+	DBManager::setDataObjectValue( "LinkerStudentAssignment", keyLSAID, "answers", keyAnswers );
+	DBManager::setDataObjectValue( "LinkerStudentAssignment", keyLSAID, "key", "YES" );
+	DBManager::setDataObjectValue( "LinkerStudentAssignment", keyLSAID,
+		"AssignmentID", string( itoa( assignmentID, itoastr, 10 ) ) );
+	itoastr = "";
+	keyQs = questionsResultsFromAnswers( keyVect, assignmentID );
+	DBManager::setDataObjectValue( "LinkerStudentAssignment", keyLSAID,
+		"questions", keyQs );
+
+	// ----- END KEY HANDLING -----
+
+	// ----- STUDENT HANDLING -----
+
+	studentReturnVect = ImageManager::readAssignmentSetFromImage( filenames, numQ );
+	for( int i = 0; i < studentReturnVect.size(); i++ ) {
+		// Get results from student
+		studentVect = studentReturnVect.at( i );
+		studentName = studentVect.at( studentVect.size() - 1 );
+		studentVect.pop_back();
+		studentAmbiguous = studentVect.at( studentVect.size() - 1 );
+		studentVect.pop_back();
+
+		// Put student in DB at ImageFile
+		studentImgFileID = DBManager::makeDataObject( "ImageFile", filenames.at( i ) );
+		studentID = findStudentIDFromName( studentName );
+		// If name (and therefore ID) was found, link appropriately.
+		// Otherwise, make a new student and link with the new ID
+		if( studentID == -1 ) {
+			studentID = DBManager::makeDataObject( "Student", filenames.at( i ) );
+		}
+		DBManager::setDataObjectValue( "ImageFile", studentImgFileID, "StudentID", 
+			string( itoa( studentID, itoastr, 10 ) ) );
+		itoastr = "";
+		DBManager::setDataObjectValue( "ImageFile", studentImgFileID, "AssignmentID",
+			string( itoa( assignmentID, itoastr, 10 ) ) );
+		itoastr = "";
+		DBManager::setDataObjectValue( "ImageFile", studentImgFileID,
+			"ambiguousAnswers", studentAmbiguous );
+		studentAnswers = answersFromVector( studentVect );
+		DBManager::setDataObjectValue( "ImageFile", studentImgFileID, "answers",
+			studentAnswers );
+
+		// Link student to LSA
+		DBManager::linkAToB( "LinkerStudentAssignment", studentID, "StudentID", 
+			keyImgFileID, "ImageFileID" );
+		studentLSAID = atoi( DBManager::getLinkedValues( "LinkerStudentAssignment",
+			keyStudentID, keyImgFileID, "StudentID", "ImageFileID" ).at( 0 ).c_str() );
+		DBManager::setDataObjectValue( "LinkerStudentAssignment", studentLSAID, "answers", studentAnswers );
+		DBManager::setDataObjectValue( "LinkerStudentAssignment", studentLSAID,
+			"AssignmentID", string( itoa( assignmentID, itoastr, 10 ) ) );
+		itoastr = "";
+		DBManager::setDataObjectValue( "LinkerStudentAssignment", studentLSAID, 
+			"questions", keyQs );
+
+		// Add ID to vector of IDs
+		studentIDs.push_back( studentID );
+	}
+
+	// ----- END STUDENT HANDLING -----
 
 	// Grades the data and sends it to the database
-	Grader::grade( assignmentID, keyResults.at( 0 ), studentResults );
-
+	Grader::grade( assignmentID, keyLSAID, studentIDs );
 }
+
+// Returns the student ID if given name was found in the DB,
+//	- Or if any close variations thereof ( John Smit = John Smith )
+// Note - will not work if "(no name)"
+// Returns -1 if not found or if no name
+// TODO
+int GradeSnapModel::findStudentIDFromName( std::string name ) {
+	if( name.compare( "(no name)" ) == 0 ) {
+		return -1;
+	}
+
+	return -1;
+}
+
+// Returns a DB-formatted string of answers
+// (Letters delimited by commas)
+std::string GradeSnapModel::answersFromVector( std::vector< std::string > answerVect ) {
+	stringstream as;
+	for( unsigned int i = 0; i < answerVect.size(); i++ ) {
+			as << answerVect.at( i ) << ",";
+	}
+	return as.str();
+}
+
+
+// Returns a DB-formatted string of questions
+// If using simple answers, format is just list of qIDs (A,B,E,D...)
+// If not, returns "ERROR" (this can only work with simple answers)
+std::string GradeSnapModel::questionsResultsFromAnswers( vector< string > answers, 
+	int assignmentID ) {
+
+	// Checks to see if current assignment is using simple answers
+	int usingSimple = atoi( DBManager::getDataObjectValue( "Assignment", assignmentID,
+		"usingSimpleAnswers").c_str() );
+	if( usingSimple != 1 ) {
+		return "ERROR";
+	}
+	
+	// Adds the answers from the vector to the string,
+	// Delimited by a comma (,)
+	string simpleAnswers;
+	for( unsigned int i = 0; i < answers.size(); i++ ) {
+		simpleAnswers = simpleAnswers.at( i ) + ",";
+	}
+
+	return simpleAnswers;
+}
+
+
 
 // Prints the results to standard output
 void GradeSnapModel::printResults( int assignmentID, int classID, int keyID,

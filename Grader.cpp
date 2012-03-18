@@ -51,10 +51,9 @@ void Grader::grade( int assignmentID, std::pair< int, std::vector< std::string >
 double Grader::gradeSingleAssignment( vector< string > key, vector< string > answers ) {
 	double numCorrect = 0.0;
 
-	for ( unsigned int i = 0; i < key.size(); i++ ) {
+	// TODO handle strictness
 
-		//cout << "#" << i << "----KEY: " << key.at( i ) << "  -----ANSWER: " << answers.at( i ) << endl;
-		
+	for ( unsigned int i = 0; i < key.size(); i++ ) {
 		if ( key.at( i ).compare( answers.at( i ) ) == 0 ) {
 				numCorrect++;
 		}

@@ -20,8 +20,8 @@ namespace Grader {
 	// Main lead-in function for grading
 	// ALL it does is call the helper function to get the grade,
 	//	Then sets the score and answers
-	void grade( int assignmentID, std::pair< int, std::vector< std::string > > keyAnswers, 
-		std::vector< std::pair< int, std::vector< std::string > > > studentAnswers );
+	void grade( int assignmentID, int keyID, 
+		std::vector< int > studentIDs );
 
 	// Helper to grade a single assignment
 	double gradeSingleAssignment( std::vector< std::string > key,
