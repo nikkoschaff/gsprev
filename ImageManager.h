@@ -28,7 +28,6 @@ namespace ImageManager {
 	std::vector< std::pair< int, std::vector< std::string > > >
 		readAssignmentSetFromImage( std::vector< 
 		std::pair< int, std::string > > theFilenames, int numQ );
-
 };
 
 
