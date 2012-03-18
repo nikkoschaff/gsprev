@@ -215,7 +215,7 @@ std::vector< std::pair< std::string, double > > Statistics::incorrectAnswerAccur
 		for( mapIt = fullAnswers.at( i ).begin();
 			mapIt != fullAnswers.at( i ).end(); i++ ) {
 
-			if( mapIt->second > freqs && mapIt->first.compare( keyVect.at( i ) ) != 0 ) {
+			if( mapIt->second > freq && mapIt->first.compare( keyVect.at( i ) ) != 0 ) {
 				freq = mapIt->second;
 				letter = mapIt->first;
 			}

@@ -25,7 +25,7 @@ public:
 	// At this level the student-ID pair should already be made
 	void evaluateImage( int assignmentID,int classID, 
 		std::pair< int, std::string > keyFilePair,
-		std::vector< std::pair< int, std::string > > filenames, int numQ );
+		std::vector< std::pair< int, std::string > > filenames );
 
 	void printResults( int assignmentID, int classID, int keyID,
 		std::vector< int > studentIDs );

@@ -21,7 +21,9 @@ GradeSnapModel::~GradeSnapModel() {
 //	set unknown students to be of ID -1
 void GradeSnapModel::evaluateImage( int assignmentID,int classID, 
 	std::pair< int, std::string > keyFilePair,
-	std::vector< std::pair< int, std::string > > filenames, int numQ )  {
+	std::vector< std::pair< int, std::string > > filenames )  {
+
+	int numQ = atoi( DBManager::getDataObjectValue( "Assignment", assignmentID, "AssignmentID" ).c_str() );
 
 	// Stores the key in a vector for image evaluation
 	// Evaluates and returns the data from the image
@@ -36,7 +38,6 @@ void GradeSnapModel::evaluateImage( int assignmentID,int classID,
 	studentResults = ImageManager::readAssignmentSetFromImage( filenames, numQ );
 
 	// Grades the data and sends it to the database
-	// TODO VERIFY - is this the right thing to do (sending data to db)?
 	Grader::grade( assignmentID, keyResults.at( 0 ), studentResults );
 
 }
