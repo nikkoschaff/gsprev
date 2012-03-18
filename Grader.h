@@ -24,8 +24,16 @@ namespace Grader {
 		std::vector< int > studentIDs );
 
 	// Helper to grade a single assignment
-	double gradeSingleAssignment( std::vector< std::string > key,
-		std::vector< std::string > answers );
+	double gradeSimpleAssignment( int assignmentID, int studentID, bool strict );
+
+	// Helper to grade QB-based assignment
+	double gradeQBAssignment( int assignmentID, int studentID, bool strict );
+
+	// Helper function to get answer vector from DB string
+	std::vector< std::string > getLettersVector( std::string answers );
+
+	// Helper function to get answer vector from DB/QB string
+	std::vector< std::string > getQBLettersVector( std::string answers );
 
 };
 
