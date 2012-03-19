@@ -200,7 +200,7 @@ void gui_panel_grade::onGradeButtonClick( wxCommandEvent& event ) {
 
 	// Grade via gsm
 	GradeSnapModel gsm;
-	gsm.evaluateImage( assignmentID, classID, keyFilePair, studentFilePairs, atoi( numQuestions.c_str() ) );
+	gsm.evaluateImage( assignmentID, classID, keyFilename, studentExamFilenames );
 
 
 	// Save values in gsm

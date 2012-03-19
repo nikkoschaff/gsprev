@@ -29,11 +29,14 @@ namespace Grader {
 	// Helper to grade QB-based assignment
 	double gradeQBAssignment( int assignmentID, int studentID, bool strict );
 
+	// Helper function to get the letters of the corect answers (in answer format)
+	std::string answerLettersFromQB( std::string question );
+
 	// Helper function to get answer vector from DB string
 	std::vector< std::string > getLettersVector( std::string answers );
 
 	// Helper function to get answer vector from DB/QB string
-	std::vector< std::string > getQBLettersVector( std::string answers );
+	std::vector< std::string > getQBLettersVector( std::string qbKey );
 
 };
 

@@ -24,7 +24,7 @@ void GradeSnapModel::evaluateImage( int assignmentID,int classID,
 
 	// General members
 	int numQ = atoi( DBManager::getDataObjectValue( "Assignment", assignmentID, "AssignmentID" ).c_str() );
-	char* itoastr;
+	char* itoastr = "";
 
 	// Key members
 	string keyAmbiguous;
@@ -62,7 +62,7 @@ void GradeSnapModel::evaluateImage( int assignmentID,int classID,
 
 	// Put key in DB at ImageFile
 	keyImgFileID = DBManager::makeDataObject( "ImageFile", keyFilename );
-	keyName = "KEY" + string( itoa( keyImgFileID, itoastr, 10 ) );
+	keyName = "KEY" + string( _itoa( keyImgFileID, itoastr, 10 ) );
 	itoastr = "";
 
 	// Get studentID from key in Student table
@@ -70,16 +70,16 @@ void GradeSnapModel::evaluateImage( int assignmentID,int classID,
 
 	// Fill out key ImageFile table values
 	DBManager::setDataObjectValue( "ImageFile", keyImgFileID, "StudentID",
-		string( itoa( keyStudentID, itoastr, 10 ) ) );
+		string( _itoa( keyStudentID, itoastr, 10 ) ) );
 	itoastr = "";
 	DBManager::setDataObjectValue( "ImageFile", keyImgFileID, "AssignmentID", 
-		string( itoa( assignmentID, itoastr, 10 ) ) );
+		string( _itoa( assignmentID, itoastr, 10 ) ) );
 	itoastr = "";
 	DBManager::setDataObjectValue( "ImageFile", keyImgFileID, "graded", 
-		string( itoa( 1, itoastr, 10 ) ) );
+		string( _itoa( 1, itoastr, 10 ) ) );
 	itoastr = "";
 	DBManager::setDataObjectValue( "ImageFile", keyImgFileID, "AssignmentID", 
-		string( itoa( assignmentID, itoastr, 10 ) ) );
+		string( _itoa( assignmentID, itoastr, 10 ) ) );
 	DBManager::setDataObjectValue( "ImageFile", keyImgFileID, "ambiguousAnswers", 
 		keyAmbiguous );
 	keyAnswers = answersFromVector( keyVect );
@@ -95,7 +95,7 @@ void GradeSnapModel::evaluateImage( int assignmentID,int classID,
 	DBManager::setDataObjectValue( "LinkerStudentAssignment", keyLSAID, "answers", keyAnswers );
 	DBManager::setDataObjectValue( "LinkerStudentAssignment", keyLSAID, "key", "YES" );
 	DBManager::setDataObjectValue( "LinkerStudentAssignment", keyLSAID,
-		"AssignmentID", string( itoa( assignmentID, itoastr, 10 ) ) );
+		"AssignmentID", string( _itoa( assignmentID, itoastr, 10 ) ) );
 	itoastr = "";
 	keyQs = questionsResultsFromAnswers( keyVect, assignmentID );
 	DBManager::setDataObjectValue( "LinkerStudentAssignment", keyLSAID,
@@ -106,7 +106,7 @@ void GradeSnapModel::evaluateImage( int assignmentID,int classID,
 	// ----- STUDENT HANDLING -----
 
 	studentReturnVect = ImageManager::readAssignmentSetFromImage( filenames, numQ );
-	for( int i = 0; i < studentReturnVect.size(); i++ ) {
+	for( unsigned int i = 0; i < studentReturnVect.size(); i++ ) {
 		// Get results from student
 		studentVect = studentReturnVect.at( i );
 		studentName = studentVect.at( studentVect.size() - 1 );
@@ -123,10 +123,10 @@ void GradeSnapModel::evaluateImage( int assignmentID,int classID,
 			studentID = DBManager::makeDataObject( "Student", filenames.at( i ) );
 		}
 		DBManager::setDataObjectValue( "ImageFile", studentImgFileID, "StudentID", 
-			string( itoa( studentID, itoastr, 10 ) ) );
+			string( _itoa( studentID, itoastr, 10 ) ) );
 		itoastr = "";
 		DBManager::setDataObjectValue( "ImageFile", studentImgFileID, "AssignmentID",
-			string( itoa( assignmentID, itoastr, 10 ) ) );
+			string( _itoa( assignmentID, itoastr, 10 ) ) );
 		itoastr = "";
 		DBManager::setDataObjectValue( "ImageFile", studentImgFileID,
 			"ambiguousAnswers", studentAmbiguous );
@@ -141,7 +141,7 @@ void GradeSnapModel::evaluateImage( int assignmentID,int classID,
 			keyStudentID, keyImgFileID, "StudentID", "ImageFileID" ).at( 0 ).c_str() );
 		DBManager::setDataObjectValue( "LinkerStudentAssignment", studentLSAID, "answers", studentAnswers );
 		DBManager::setDataObjectValue( "LinkerStudentAssignment", studentLSAID,
-			"AssignmentID", string( itoa( assignmentID, itoastr, 10 ) ) );
+			"AssignmentID", string( _itoa( assignmentID, itoastr, 10 ) ) );
 		itoastr = "";
 		DBManager::setDataObjectValue( "LinkerStudentAssignment", studentLSAID, 
 			"questions", keyQs );
@@ -241,14 +241,14 @@ void GradeSnapModel::getStats( int assignmentID, int classID,
 
 	cout << "Grade Distribution: " << endl;
 	vector< pair< char, double > > dist = Statistics::gradeDistribution( 
-		assignmentID, studentIDs, keyID );
+		assignmentID, studentIDs );
 	for( unsigned int i = 0; i < dist.size(); i++ ) {
 		cout << dist.at( i ).first << ": " << dist.at( i ).second << "%" << endl;
 	}
 
 	cout << "Answer accuracy: " << endl << endl;
 	vector< pair< string, double > > accuracy = Statistics::answerAccuracy( 
-		assignmentID, studentIDs, keyID );
+		assignmentID, studentIDs );
 	for( unsigned int i = 0; i < accuracy.size(); i++ ) {
 		cout << i + 1 << ": " <<  accuracy.at( i ).first << " - "
 			<< accuracy.at( i ).second << "%" << endl;

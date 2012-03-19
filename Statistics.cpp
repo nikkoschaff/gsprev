@@ -93,8 +93,9 @@ pair< int, double > Statistics::mode( int assignmentID, std::vector< int > stude
 }
 
 // Gets the accuracy for each question
+// TODO fix
 std::vector< std::pair< std::string, double > > Statistics::answerAccuracy( int assignmentID,
-		std::vector< int > studentIDs, int keyID  ) {
+		std::vector< int > studentIDs ) {
 
 	vector< int > ids;
 	vector< pair< string, double > > results;
@@ -141,14 +142,18 @@ std::vector< std::pair< std::string, double > > Statistics::answerAccuracy( int 
 	for( unsigned int i = 0; i < results.size(); i++ ) {
 		results.at( i ).second = ( results.at( i ).second / ids.size() ) * 100;
 	}
+	
 	return results;
 }
 
 // Percentage of the most-chosen incorrect answers
+// TODO fix
 std::vector< std::pair< std::string, double > > Statistics::incorrectAnswerAccuracy( 
-		int assignmentID, std::vector< int > studentIDs, int keyID ) {
+		int assignmentID, std::vector< int > studentIDs ) {
+
 
 	vector< pair< string, double > > badAnswers;
+	
 	vector< int > ids;
 
 	// Get the IDs of the rows containing the grades
@@ -225,13 +230,12 @@ std::vector< std::pair< std::string, double > > Statistics::incorrectAnswerAccur
 
 		badAnswers.push_back( pair< string, double >( letter, freqPercentage ) );
 	}
-
 	return badAnswers;
 }
 
 // Shows the distribution for letter grades
 std::vector< std::pair< char, double > > Statistics::gradeDistribution( int assignmentID,
-	std::vector< int > studentIDs, int keyID ) {
+	std::vector< int > studentIDs ) {
 
 	vector< pair< char, double > > dist;
 	for( unsigned int i = 0; i < 5; i++ ) {
