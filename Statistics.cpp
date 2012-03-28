@@ -1,3 +1,9 @@
+/**
+ * Statistics.cpp - Implementation for the Statistics module
+ *
+ * @author	Nikko Schaff
+ */
+
 
 #include "Statistics.h"
 
@@ -315,36 +321,3 @@ double Statistics::standardDeviation( int assignmentID,
 	return standardDeviation;
 }
 
-
-vector< string > Statistics::getLettersVector( string answers ) {
-	vector< string > lettersVect;
-	string at = "";
-
-
-	for( unsigned int i = 0; i < answers.size(); i++ ) {
-		at = answers.at( i );
-
-		if( at.compare( "," ) == 0 ) {
-			if ( i + 1 < answers.size() ) {
-				string thisAt = "";
-				thisAt += answers.at( i + 1 );
-				
-				if( thisAt.compare( "," ) == 0 ) {
-					lettersVect.push_back( "" );
-				}
-			}
-		} else {
-			string letters = "";
-			while ( i < answers.size() && at.compare( "," ) != 0 ) {
-				letters += answers.at( i );
-				i++;
-				at = answers.at( i );
-			}
-			lettersVect.push_back( letters );
-			i--;
-		}
-
-	}
-
-	return lettersVect;
-}

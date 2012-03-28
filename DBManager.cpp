@@ -1,6 +1,8 @@
-//
-//
- 
+/**
+ * DBManager.cpp - Implementation for the DBManager
+ *
+ * @author	Nikko Schaff
+ */
 
 
 #include "DBManager.h"
@@ -8,9 +10,6 @@
 #include "DBOutOfBoundsException.h"
 
 using namespace std;
-
-#include <iostream>
-#include <sstream>
 
 static sqlite3 * db = NULL;
 

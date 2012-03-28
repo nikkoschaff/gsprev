@@ -12,10 +12,17 @@
 #include < iostream >
 #include < exception >
 #include < string >
-using namespace std;
 
-class ImageReadException: public exception {
+/**
+ * ImageReadException - Exception thrown when image cannot be read
+ *
+ */
+class ImageReadException: public std::exception {
 
+	/**
+	 * what - Message displayed when image cannot be read
+	 * @return char*	The message displayed expanding on the exception's problem
+	 */
 	virtual const char* what() const throw() {
 		return "Error reading image. Check to see if all 4 corner points in view with scribbles on page";
 	}

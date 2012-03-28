@@ -1,3 +1,9 @@
+/**
+ * Grader.cpp - Implementation for the Grader module
+ *
+ * @author	Nikko Schaff
+ */
+
 
 #include "Grader.h"
 
@@ -46,9 +52,9 @@ double Grader::gradeSimpleAssignment( int assignmentID, int studentID,
 
 	int LSAID = atoi( DBManager::getLinkedValues( "LinkerStudentAssignment", assignmentID, studentID,
 		"AssignmentID", "StudentID" ).at( 0 ).c_str() );
-	vector< string > answers = getLettersVector(
+	vector< string > answers = Helper::formatAnswersFromSimple(
 		DBManager::getDataObjectValue( "LinkerStudentAssignment", LSAID, "answers" ) );
-	vector< string > key = getLettersVector(
+	vector< string > key = Helper::formatAnswersFromSimple(
 		DBManager::getDataObjectValue( "LinkerStudentAssignment", LSAID, "questions" ) );
 
 	if( strict ) {
@@ -76,14 +82,15 @@ double Grader::gradeSimpleAssignment( int assignmentID, int studentID,
 }
 
 // Helper to grade QB-based assignment
+// TODO fix
 double Grader::gradeQBAssignment( int assignmentID, int studentID, bool strict ) {
 
 	double numCorrect = 0.0;
 	int LSAID = atoi( DBManager::getLinkedValues( "LinkerStudentAssignment", assignmentID, studentID,
 		"AssignmentID", "StudentID" ).at( 0 ).c_str() );
-	vector< string > answers = getLettersVector(
+	vector< string > answers = Helper::formatAnswersFromSimple(
 		DBManager::getDataObjectValue( "LinkerStudentAssignment", LSAID, "answers" ) );
-	vector< string > questions = getQBLettersVector(
+	vector< string > questions = Helper::formatAnswersFromQB(
 		DBManager::getDataObjectValue( "LinkerStudentAssignment", LSAID, "questions" ) );
 
 	// String of answers in answer format (from questions thorugh DB parsing)
@@ -112,106 +119,4 @@ double Grader::gradeQBAssignment( int assignmentID, int studentID, bool strict )
 	}
 	double finalScore = abs( numCorrect / questions.size() );
 	return finalScore;
-}
-
-// Helper function to get the letters of the corect answers (in answer format)
-std::string Grader::answerLettersFromQB( std::string question ) {
-
-	string qID = "";
-	int index = 0;
-	vector< string > options;
-	string optionstr;
-	string goodLetter;
-
-	// Gets the ID of the question
-	while( index < question.size() && question.substr( index, 1 ).compare( "(" ) != 0 ) {
-		qID = qID + question.at( index );
-		index++;
-	}
-	index++;
-
-	question = question.substr( index, question.size() - index );
-
-	// For each option, check to see if it was right or wrong
-	//	If correct, it remembers it according to the index of the question
-	for( unsigned int i = 1; i < question.size(); i += 2 ) {
-		goodLetter = "";
-
-		// Get the option answer from the DB/QB
-		optionstr = DBManager::getDataObjectValue( 
-			"QuestionBank", atoi( qID.c_str() ), "answer" + question.substr( i, 1 ) ).at( 0 );
-		
-		// Checks correctness and applies at correct location
-		if( optionstr.substr( 0, 1 ).compare( "C" ) ) {
-			if( i == 1 + index ) {
-				goodLetter = goodLetter + "A";
-			} else if ( i == 3) {
-				goodLetter = goodLetter + "B";
-			} else if ( i == 5 ) {
-				goodLetter = goodLetter + "C";
-			} else if ( i == 7 ) {
-				goodLetter = goodLetter + "D";
-			} else if ( i == 9 ) {
-				goodLetter = goodLetter + "E";
-			}
-		}
-	}
-
-	return goodLetter;
-}
-
-// Helper function to get answer vector from DB string
-vector< string > Grader::getLettersVector( string answers ) {
-	vector< string > lettersVect;
-	string at = "";
-
-
-	for( unsigned int i = 0; i < answers.size(); i++ ) {
-		at = answers.at( i );
-
-		if( at.compare( "," ) == 0 ) {
-			if ( i + 1 < answers.size() ) {
-				string thisAt = "";
-				thisAt += answers.at( i + 1 );
-				
-				if( thisAt.compare( "," ) == 0 ) {
-					lettersVect.push_back( "" );
-				}
-			}
-		} else {
-			string letters = "";
-			while ( i < answers.size() && at.compare( "," ) != 0 ) {
-				letters += answers.at( i );
-				i++;
-				at = answers.at( i );
-			}
-			lettersVect.push_back( letters );
-			i--;
-		}
-
-	}
-
-	return lettersVect;
-}
-
-// Helper function to get answer vector from DB/QB string
-// ID(1,2,3,4,5)+ID(5,4,3,2,1)
-vector< string > Grader::getQBLettersVector( string qbKey ) {
-
-	vector< string > lettersVect;
-	int index = 0;
-	int prevIndex = 0;
-
-	// Gets the ID of the question
-	while( index < qbKey.size() ) {
-		if( qbKey.substr( index, 1 ).compare( "+" ) == 0 ) {
-			lettersVect.push_back( qbKey.substr( prevIndex, index-1 ) );
-			prevIndex = index+1;
-		}
-
-		index++;
-	}
-
-
-	return lettersVect;
 }

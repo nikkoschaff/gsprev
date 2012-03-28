@@ -13,9 +13,9 @@ using namespace std;
 // Grades the assignment by making an AssignmentImage through
 //		ImageEvaluator, then extracing the data and placing it in the 
 //		Assignment, for every image in the imagefile
-	std::vector< vector< string > >
-		ImageManager::readAssignmentSetFromImage( std::vector< 
-		std::string > theFilenames, int numQ  ) {
+std::vector< vector< string > >
+	ImageManager::readAssignmentSetFromImage( std::vector< 
+	std::string > theFilenames, int numQ  ) {
 
 	std::vector< std::vector< std::string > > results;
 	ImageEvaluator imgEval( numQ );

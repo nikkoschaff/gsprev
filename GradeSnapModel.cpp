@@ -1,3 +1,8 @@
+/**
+ * GradeSnapModel - Implementation for the GSM module
+ *
+ * @author	Nikko Schaff
+ */
 
 #include "GradeSnapModel.h"
 
@@ -18,6 +23,7 @@ GradeSnapModel::~GradeSnapModel() {
 
 
 // At this point, NOTHING is explicitly known about the images.  Only the filenames
+// TODO fix
 void GradeSnapModel::evaluateImage( int assignmentID,int classID, 
 	string keyFilename,
 	std::vector< string > filenames )  {
@@ -161,48 +167,21 @@ void GradeSnapModel::evaluateImage( int assignmentID,int classID,
 // Note - will not work if "(no name)"
 // Returns -1 if not found or if no name
 // TODO
-int GradeSnapModel::findStudentIDFromName( std::string name ) {
+int GradeSnapModel::findStudentIDFromName( std::string name, int assignmentID, int classID ) {
 	if( name.compare( "(no name)" ) == 0 ) {
 		return -1;
 	}
 
+	vector< int > linkerStudentIDs; 
+	char* str = "";
+	linkerStudentIDs = DBManager::getDataObjectID( "LinkerClassStudent", "ClassID", _itoa( classID, str, 10 ) );
+	vector< string > studentStringIDs;
+	str = "";
+	
+
+
 	return -1;
 }
-
-// Returns a DB-formatted string of answers
-// (Letters delimited by commas)
-std::string GradeSnapModel::answersFromVector( std::vector< std::string > answerVect ) {
-	stringstream as;
-	for( unsigned int i = 0; i < answerVect.size(); i++ ) {
-			as << answerVect.at( i ) << ",";
-	}
-	return as.str();
-}
-
-
-// Returns a DB-formatted string of questions
-// If using simple answers, format is just list of qIDs (A,B,E,D...)
-// If not, returns "ERROR" (this can only work with simple answers)
-std::string GradeSnapModel::questionsResultsFromAnswers( vector< string > answers, 
-	int assignmentID ) {
-
-	// Checks to see if current assignment is using simple answers
-	int usingSimple = atoi( DBManager::getDataObjectValue( "Assignment", assignmentID,
-		"usingSimpleAnswers").c_str() );
-	if( usingSimple != 1 ) {
-		return "ERROR";
-	}
-	
-	// Adds the answers from the vector to the string,
-	// Delimited by a comma (,)
-	string simpleAnswers;
-	for( unsigned int i = 0; i < answers.size(); i++ ) {
-		simpleAnswers = simpleAnswers.at( i ) + ",";
-	}
-
-	return simpleAnswers;
-}
-
 
 
 // Prints the results to standard output
@@ -227,6 +206,7 @@ void GradeSnapModel::printResults( int assignmentID, int classID, int keyID,
 	cout << endl << "Done grading" << endl << endl;
 }
 
+// Prints results of stats to standard output
 void GradeSnapModel::getStats( int assignmentID, int classID,
 	int keyID, vector< int > studentIDs) {
 
@@ -260,37 +240,45 @@ void GradeSnapModel::getStats( int assignmentID, int classID,
 		assignmentID, studentIDs ) << endl;
 }
 
+// Sets the currently-selected key ID
 void GradeSnapModel::setkeyid( int nid ) {
 	GradeSnapModel::selKeyID = nid;
 }
 
+// Sets the currently-selected assignment ID
 void GradeSnapModel::setassignmentid( int nid ) {
 	GradeSnapModel::selAssignmentID = nid;
 }
 
+// Sets the currently-selected student IDs
 void GradeSnapModel::setstudentids( std::vector< int > nids ) {
 	GradeSnapModel::selStudentIDs = nids;
 }
 
+// Sets the current currently-selected student ID
 void GradeSnapModel::setcurstudentid( int nid ) {
 	GradeSnapModel::selcurStudentID = nid;
 }
 
+// Gets the ID of the selected key
 int GradeSnapModel::getkeyid() {
 	int i = GradeSnapModel::selKeyID;
 	return i;
 }
 
+// Gets the ID of the selected assignment
 int GradeSnapModel::getassignmentid() {
 	int i = GradeSnapModel::selAssignmentID;
 	return i;
 }
 
+// Gets the the IDs of the selected students
 std::vector< int > GradeSnapModel::getstudentids() {
 	vector< int > is = GradeSnapModel::selStudentIDs;
 	return is;
 }
 
+// Gets the ID of the currently-selected student
 int GradeSnapModel::getselcurstudentid() {
 	int i = GradeSnapModel::selcurStudentID;
 	return i;

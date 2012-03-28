@@ -20,10 +20,11 @@
 namespace ImageManager {
 
 	/**
-	 * Grades the assignment by making an AssignmentImage through
-	 *		ImageEvaluator, then extracing the data and placing it in the 
-	 *		Assignment, for every image in the imagefile
+	 * Read each file from the given filename and return the answers selected
 	 *
+	 * @param	theFilenames	Vector of filenames
+	 * @param	numQ	Number of questions on the exam
+	 * @return	vector< vector< string > >	Each exam with answers, name filled in
 	 */
 	std::vector< std::vector< std::string > >
 		readAssignmentSetFromImage( std::vector< 
