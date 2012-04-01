@@ -1,5 +1,4 @@
-﻿  gui_panel_viewer.cpp
-  gui_panel_stats.cpp
-  gui_panel_grade.cpp
-  Generating Code...
-  GradeSnapMain.vcxproj -> C:\Users\Nikko\documents\visual studio 2010\Projects\GradeSnapMain\Debug\GradeSnapMain.exe
+﻿  Grader.cpp
+c:\users\nikko\documents\visual studio 2010\projects\gradesnapmain\gradesnapmain\grader.cpp(127): warning C4018: '<' : signed/unsigned mismatch
+c:\users\nikko\documents\visual studio 2010\projects\gradesnapmain\gradesnapmain\grader.cpp(206): warning C4018: '<' : signed/unsigned mismatch
+  GradeSnapMain.vcxproj -> C:\Users\Nikko\Documents\Visual Studio 2010\Projects\GradeSnapMain\Debug\GradeSnapMain.exe

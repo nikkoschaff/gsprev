@@ -39,9 +39,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Notes.h">
-      <Filter>Backend\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="DBManager.h">
       <Filter>Backend\Header Files</Filter>
     </ClInclude>
@@ -81,15 +78,18 @@
     <ClInclude Include="gui_panel_stats.h">
       <Filter>GUI\StatsWindow</Filter>
     </ClInclude>
+    <ClInclude Include="DBOutOfBoundsException.h">
+      <Filter>Backend\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Helper.h">
+      <Filter>Backend\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DBManager.cpp">
       <Filter>Backend\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Grader.cpp">
-      <Filter>Backend\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GradeSnap.cpp">
       <Filter>Backend\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GradeSnapModel.cpp">
@@ -121,6 +121,9 @@
     </ClCompile>
     <ClCompile Include="gui_panel_stats.cpp">
       <Filter>GUI\StatsWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="Helper.cpp">
+      <Filter>Backend\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
